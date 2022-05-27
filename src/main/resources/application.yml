@@ -1,0 +1,47 @@
+mybatis:
+  mapper-locations: classpath:mappers/*Mapper.xml
+  type-aliases-package: com.pandora
+logging:
+  level:
+    com:
+      pandora: DEBUG
+  file:
+    path: C:\Users\Jay\Desktop
+    clean-history-on-start: true
+
+spring:
+  servlet:
+    multipart:
+      enabled: true
+      max-request-size: 100MB
+      max-file-size: 100MB
+      file-size-threshold: 10MB
+pandora:
+  eastmoney:
+    url: http://datacenter-web.eastmoney.com
+server:
+  servlet:
+    context-path: /pandora
+---
+spring:
+  profiles: prod
+  datasource:
+    url: jdbc:mysql://116.62.222.63/pandora?useSSL=false
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: Jay-123456!
+shop:
+  ftp:
+    ip: 101.200.74.208
+    username: jay
+    password: Jay-123456!
+pandora:
+  wx:
+    url: https://api.weixin.qq.com
+    app-id: wx80e8599c14b12965
+    app-secret: 01f7af2f69ba7f210bc1b44cce6fb962
+  eastmoney:
+    url: http://datacenter-web.eastmoney.com
+logging:
+  file:
+    path: /root/taoshop/log

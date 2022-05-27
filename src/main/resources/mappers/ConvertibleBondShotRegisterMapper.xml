@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pandora.domain.convertiblebond.mapper.ConvertibleBondShotRegisterMapper">
+    <resultMap id="BaseResultMap" type="com.pandora.domain.convertiblebond.model.ConvertibleBondShotRegister">
+        <id column="id" property="id"/>
+        <result column="bond_code" property="bondCode"/>
+        <result column="user_id" property="userId"/>
+        <result column="email" property="email"/>
+        <result column="is_send" property="isSend"/>
+        <result column="send_time" property="sendTime"/>
+        <result column="last_modify_time" property="lastModifyTime"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+
+    <sql id="BaseColumnList">
+        id, bond_code, user_id, email, is_send, send_time, last_modify_time, create_time
+    </sql>
+
+    <insert id="insert" parameterType="ConvertibleBondShotRegister">
+        INSERT INTO convertible_bond_shot_register(id, bond_code, user_id, email, is_send, send_time)
+        VALUES
+        (#{item.id}, #{item.bondCode}, #{item.userId}, #{item.email}, #{item.isSend}, #{item.sendTime})
+    </insert>
+</mapper>

@@ -1,0 +1,78 @@
+buildscript {
+    repositories {
+        maven {
+            url 'http://maven.aliyun.com/nexus/content/groups/public/'
+        }
+    }
+    dependencies {
+        classpath 'org.flywaydb:flyway-gradle-plugin:5.2.4'
+    }
+}
+
+plugins {
+    id 'org.springframework.boot' version '2.2.5.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+    id 'java'
+    id 'org.flywaydb.flyway' version '5.2.4'
+}
+
+group = 'com.tao'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    maven {
+        url 'http://maven.aliyun.com/nexus/content/groups/public/'
+    }
+}
+
+dependencies {
+    //implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.1.2'
+    //compile 'org.springframework.boot:spring-boot-starter-aop'
+
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    //flyway
+    compile 'org.flywaydb:flyway-core:5.2.4'
+    //mysql driver
+    compile 'mysql:mysql-connector-java:8.0.11'
+
+    //文件上传
+    compile 'commons-net:commons-net:3.1'
+
+    compile 'com.google.guava:guava:20.0'
+    
+    compile 'org.apache.pdfbox:pdfbox:2.0.12'
+
+    compile 'com.google.code.gson:gson:2.6.2'
+
+    //compile 'org.springframework.boot:spring-boot-starter-security'
+    //契约测试
+    testCompile 'com.github.macdao:moscow:0.3.0'
+    //测试时需要模拟http请求
+    testRuntime 'com.squareup.okhttp3:okhttp:3.1.2'
+    testRuntime 'org.junit.platform:junit-platform-launcher:1.5.2'
+    testRuntime 'org.junit.vintage:junit-vintage-engine:5.5.2'
+
+    testRuntime 'org.springframework.boot:spring-boot-starter-test'
+
+}
+
+flyway{
+    url = "jdbc:mysql://127.0.0.1/pandora?useSSL=false&serverTimezone=CTT"
+    user = 'root'
+    password = 'jay-123456!'
+}
+
+test {
+    useJUnitPlatform()
+}

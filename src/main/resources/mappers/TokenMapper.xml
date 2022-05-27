@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pandora.domain.user.mapper.TokenMapper">
+    <resultMap id="BaseResultMap" type="com.pandora.domain.user.model.Token">
+        <id column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="last_modify_time" property="lastModifyTime"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+
+
+
+    <sql id="BaseColumnList">
+        id, user_id, last_modify_time, create_time
+    </sql>
+
+    <insert id="insert" parameterType="Token">
+        INSERT INTO token(id, user_id)
+        VALUES
+        (#{id}, #{userId})
+    </insert>
+
+    <select id="findByUserId" parameterType="String" resultMap="BaseResultMap">
+        SELECT id, user_id FROM token WHERE user_id = #{userId}
+    </select>
+
+    <delete id="deleteByUserId" parameterType="String">
+        DELETE FROM token WHERE user_id = #{userId}
+    </delete>
+
+    <update id="extend" parameterType="String">
+        UPDATE token SET last_modify_time = now() WHERE id = #{id}
+    </update>
+
+    <select id="findAuthoritiesByTokenId" parameterType="String" resultType="com.pandora.domain.user.model.Role">
+        SELECT a.authority
+        FROM token t
+        INNER JOIN `user` u ON t.user_id = u.id
+        INNER JOIN authorities a ON u.id = a.user_id
+        WHERE t.id = #{tokenId}
+    </select>
+</mapper>
