@@ -1,11 +1,10 @@
 package com.pandora.infrastructure.common.isolator;
 
 import com.pandora.domain.user.mapper.TokenMapper;
-import com.pandora.domain.user.model.Role;
+import com.pandora.domain.user.model.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.List;
 
 @Slf4j
 public class NormalIsolator implements Isolator {
@@ -19,8 +18,8 @@ public class NormalIsolator implements Isolator {
     }
 
     @Override
-    public List<Role> getRolesByTokenId(String tokenId) {
-        return tokenMapper.findAuthoritiesByTokenId(tokenId);
+    public User findUserByTokenId(String tokenId) {
+        return tokenMapper.findByTokenId(tokenId);
     }
 
 

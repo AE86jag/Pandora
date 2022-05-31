@@ -4,9 +4,11 @@ import com.google.common.collect.Lists;
 import com.pandora.infrastructure.util.CommonUtil;
 import com.pandora.infrastructure.wx.model.WxLoginResponse;
 import lombok.Data;
+import org.springframework.util.CollectionUtils;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 public class User {
@@ -39,7 +41,15 @@ public class User {
         user.setOpenId("open-id");
         user.setUnionId("union-id");
         user.setStatus(1);
-        user.setAuthorities(Lists.newArrayList(Authority.buildNormal(id)));
+        user.setAuthorities(Lists.newArrayList(Authority.buildNormal(id), Authority.buildAdmin(id)));
         return user;
+    }
+
+    public List<Role> getRoles() {
+        if (authorities == null) {
+            return Lists.newArrayList();
+        }
+
+        return authorities.stream().map(Authority::getAuthority).collect(Collectors.toList());
     }
 }

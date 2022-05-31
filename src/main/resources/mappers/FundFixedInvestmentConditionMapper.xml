@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.pandora.domain.fund.fixedinvestment.mapper.FundFixedInvestmentConditionMapper">
+    <resultMap id="BaseResultMap" type="com.pandora.domain.fund.fixedinvestment.model.FundFixedInvestmentCondition">
+        <result column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="fund_code" jdbcType="VARCHAR" property="fundCode"/>
+        <result column="fund_name" jdbcType="VARCHAR" property="fundName"/>
+        <result column="target_market_value" jdbcType="DECIMAL" property="targetMarketValue"/>
+        <result column="first_category_of_cycle" jdbcType="VARCHAR" property="firstCategoryOfCycle"/>
+        <result column="second_category_of_cycle" jdbcType="VARCHAR" property="secondCategoryOfCycle"/>
+        <result column="positive_increase" jdbcType="DECIMAL" property="positiveIncrease"/>
+        <result column="negative_increase" jdbcType="DECIMAL" property="negativeIncrease"/>
+        <result column="per_amount" jdbcType="DECIMAL" property="perAmount"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
+        <result column="user_id" jdbcType="VARCHAR" property="userId"/>
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
+        <result column="last_modified_time" jdbcType="TIMESTAMP" property="lastModifiedTime"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, fund_code, fund_name, target_market_value, first_category_of_cycle, second_category_of_cycle,
+        positive_increase, negative_increase, per_amount, email, user_id, created_time, last_modified_time
+    </sql>
+
+    <insert id="insert" parameterType="FundFixedInvestmentCondition">
+        INSERT INTO fund_fixed_investment_condition
+        (id, fund_code, fund_name, target_market_value, first_category_of_cycle, second_category_of_cycle,
+        positive_increase, negative_increase, per_amount, email, user_id)
+        VALUES(#{id}, #{fundCode}, #{fundName}, #{targetMarketValue}, #{firstCategoryOfCycle}, #{secondCategoryOfCycle},
+        #{positiveIncrease}, #{negativeIncrease}, #{perAmount}, #{email}, #{userId})
+    </insert>
+</mapper>

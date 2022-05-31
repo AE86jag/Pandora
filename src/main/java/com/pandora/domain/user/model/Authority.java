@@ -16,4 +16,12 @@ public class Authority {
         authority.setAuthority(Role.NORMAL);
         return authority;
     }
+
+    public static Authority buildAdmin(String userId) {
+        Authority authority = new Authority();
+        authority.setId(CommonUtil.generateId());
+        authority.setUserId(userId);
+        authority.setAuthority(Role.ADMIN);
+        return authority;
+    }
 }

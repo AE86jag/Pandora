@@ -2,6 +2,7 @@ package com.pandora.domain.user.mapper;
 
 import com.pandora.domain.user.model.Role;
 import com.pandora.domain.user.model.Token;
+import com.pandora.domain.user.model.User;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -19,4 +20,6 @@ public interface TokenMapper {
     int extend(String id);
 
     List<Role> findAuthoritiesByTokenId(String tokenId);
+
+    User findByTokenId(String id);
 }
