@@ -48,4 +48,10 @@
         WHERE bond_code LIKE CONTACT('%', #{key}, '%')
         OR bond_short_name LIKE CONTACT('%', #{key}, '%')
     </select>
+
+    <select id="findByCode" parameterType="String" resultMap="BaseResultMap">
+        SELECT <include refid="BaseColumnList"/>
+        FROM convertible_bond
+        WHERE bond_code = #{bondCode}
+    </select>
 </mapper>

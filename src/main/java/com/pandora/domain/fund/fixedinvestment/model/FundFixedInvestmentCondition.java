@@ -24,6 +24,12 @@ public class FundFixedInvestmentCondition {
     private BigDecimal perAmount;
     private String email;
     private String userId;
+    private Integer status;
     private LocalDateTime createdTime;
     private LocalDateTime lastModifiedTime;
+
+
+    public String getCycleDescription() {
+        return firstCategoryOfCycle.getDescription() + secondCategoryOfCycle.getDescription();
+    }
 }

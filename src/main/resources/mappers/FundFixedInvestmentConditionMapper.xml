@@ -14,20 +14,46 @@
         <result column="per_amount" jdbcType="DECIMAL" property="perAmount"/>
         <result column="email" jdbcType="VARCHAR" property="email"/>
         <result column="user_id" jdbcType="VARCHAR" property="userId"/>
+        <result column="status" jdbcType="INTEGER" property="status"/>
         <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
         <result column="last_modified_time" jdbcType="TIMESTAMP" property="lastModifiedTime"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         id, fund_code, fund_name, target_market_value, first_category_of_cycle, second_category_of_cycle,
-        positive_increase, negative_increase, per_amount, email, user_id, created_time, last_modified_time
+        positive_increase, negative_increase, per_amount, email, user_id, status, created_time, last_modified_time
     </sql>
 
     <insert id="insert" parameterType="FundFixedInvestmentCondition">
         INSERT INTO fund_fixed_investment_condition
         (id, fund_code, fund_name, target_market_value, first_category_of_cycle, second_category_of_cycle,
-        positive_increase, negative_increase, per_amount, email, user_id)
+        positive_increase, negative_increase, per_amount, email, user_id, status)
         VALUES(#{id}, #{fundCode}, #{fundName}, #{targetMarketValue}, #{firstCategoryOfCycle}, #{secondCategoryOfCycle},
-        #{positiveIncrease}, #{negativeIncrease}, #{perAmount}, #{email}, #{userId})
+        #{positiveIncrease}, #{negativeIncrease}, #{perAmount}, #{email}, #{userId}, #{status})
     </insert>
+
+    <select id="findCountByUserIdAndFundCode" parameterType="map" resultType="Integer">
+        SELECT count(*) FROM fund_fixed_investment_condition
+        WHERE fund_code = #{fundCode} AND user_id = #{userId}
+    </select>
+
+    <select id="findPageByUserId" parameterType="map" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM fund_fixed_investment_condition
+        WHERE user_id = #{userId}
+        ORDER BY created_time DESC
+        LIMIT #{offset}, #{size}
+    </select>
+
+    <select id="findById" parameterType="String" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM fund_fixed_investment_condition
+        WHERE id = #{id}
+    </select>
+
+    <update id="updateStatusById" parameterType="map">
+        UPDATE fund_fixed_investment_condition
+        SET status = #{status}
+        WHERE id = #{id}
+    </update>
 </mapper>

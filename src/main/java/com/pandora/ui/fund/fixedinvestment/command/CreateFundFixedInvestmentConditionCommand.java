@@ -4,6 +4,7 @@ import com.pandora.domain.fund.fixedinvestment.model.FixedInvestmentCycleFirstCa
 import com.pandora.domain.fund.fixedinvestment.model.FixedInvestmentCycleSecondCategory;
 import com.pandora.domain.fund.fixedinvestment.model.FundFixedInvestmentCondition;
 import com.pandora.infrastructure.common.CurrentUserUtils;
+import com.pandora.infrastructure.util.CommonUtil;
 import lombok.Data;
 import org.springframework.util.StringUtils;
 
@@ -56,9 +57,9 @@ public class CreateFundFixedInvestmentConditionCommand {
 
     public FundFixedInvestmentCondition to() {
         FundFixedInvestmentCondition condition = new FundFixedInvestmentCondition();
-        condition.setId(UUID.randomUUID().toString());
+        condition.setId(CommonUtil.generateId());
         condition.setFundCode(fundCode);
-        condition.setFundName(fundName);
+        condition.setFundName(fundName.trim());
         condition.setTargetMarketValue(targetMarketValue);
         condition.setFirstCategoryOfCycle(firstCategory);
         condition.setSecondCategoryOfCycle(secondCategory);
@@ -66,6 +67,7 @@ public class CreateFundFixedInvestmentConditionCommand {
         condition.setNegativeIncrease(negativeIncrease);
         condition.setPerAmount(perAmount);
         condition.setEmail(email);
+        condition.setStatus(1);
         condition.setUserId(CurrentUserUtils.currenUserId());
         return condition;
     }

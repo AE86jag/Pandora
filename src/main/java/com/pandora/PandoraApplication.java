@@ -1,5 +1,7 @@
 package com.pandora;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.pandora.infrastructure.common.isolator.Isolator;
 import com.pandora.infrastructure.common.isolator.MockIsolator;
 import com.pandora.infrastructure.common.isolator.NormalIsolator;
@@ -28,6 +30,12 @@ public class PandoraApplication {
         return new NormalIsolator();
     }
 
+    @Bean
+    public Gson gson() {
+        //实例类中日期的类型必须是这几种类型java.util.Date, java.sql.Timestamp, java.sql.Date, setDateFormat才能生效
+        return new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+    }
+
     @Configuration
     public class WebConfigurer implements WebMvcConfigurer {
 
@@ -37,7 +45,9 @@ public class PandoraApplication {
         @Override
         public void addInterceptors(InterceptorRegistry registry){
             registry.addInterceptor(loginInterceptor)
-                    .addPathPatterns("/**");
+                    .addPathPatterns("/**")
+                    .excludePathPatterns("/error")
+                    .excludePathPatterns("/pandora/user/login");
         }
     }
 }

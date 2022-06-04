@@ -22,8 +22,9 @@
         <result column="status" property="status"/>
         <result column="last_modify_time" property="lastModifyTime"/>
         <result column="create_time" property="createTime"/>
-        <collection property="authorities" javaType="list" ofType="com.pandora.domain.user.model.Role">
-            <result column="authority"/>
+        <collection property="authorities" javaType="list" ofType="com.pandora.domain.user.model.Authority">
+
+            <result column="authority" property="authority"/>
         </collection>
     </resultMap>
 

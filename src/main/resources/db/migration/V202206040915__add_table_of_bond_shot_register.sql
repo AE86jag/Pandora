@@ -1,6 +1,7 @@
 CREATE TABLE convertible_bond_shot_register(
     id VARCHAR(32) NOT NULL COMMENT '主键',
     bond_code CHAR(6) NOT NULL COMMENT '债券代码',
+    bond_name VARCHAR(100) NOT NULL COMMENT '可转债代码',
     user_id VARCHAR(32) NOT NULL COMMENT '用户ID',
     email VARCHAR(50) NOT NULL COMMENT '邮箱',
     is_send TINYINT(1) NOT NULL DEFAULT 0 COMMENT '是否已发送邮件',

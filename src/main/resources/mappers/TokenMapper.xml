@@ -43,10 +43,11 @@
 
     <select id="findByTokenId" parameterType="String"
             resultMap="com.pandora.domain.user.mapper.UserMapper.BaseResultMapWithAuthorities">
-        SELECT u.id, u.mobile, u.email, u.open_id, u.union_id, u.status, u.last_modify_time, u.create_time
+        SELECT
+        u.id, u.mobile, u.email, u.open_id, u.union_id, u.status, u.last_modify_time, u.create_time,
         a.authority
         FROM token t
-        LEFT `user` u ON u.id = t.user_id
+        LEFT JOIN `user` u ON u.id = t.user_id
         LEFT JOIN authorities a ON u.id = a.user_id
         WHERE t.id = #{id}
     </select>

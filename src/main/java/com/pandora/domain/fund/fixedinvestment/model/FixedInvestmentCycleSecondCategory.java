@@ -50,6 +50,10 @@ public enum FixedInvestmentCycleSecondCategory {
         return parentCategory;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
     FixedInvestmentCycleSecondCategory(String description, FixedInvestmentCycleFirstCategory parentCategory) {
         this.description = description;
         this.parentCategory = parentCategory;

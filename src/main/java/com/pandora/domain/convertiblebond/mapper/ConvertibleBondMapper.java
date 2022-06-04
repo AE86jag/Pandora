@@ -11,4 +11,6 @@ public interface ConvertibleBondMapper {
     int batchInsertOrUpdate(List<ConvertibleBond> convertibleBondPOS);
 
     List<ConvertibleBond> findByCodeOrShortNameLike(String key);
+
+    ConvertibleBond findByCode(String bondCode);
 }

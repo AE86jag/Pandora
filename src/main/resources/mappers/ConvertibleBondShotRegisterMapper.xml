@@ -5,6 +5,7 @@
     <resultMap id="BaseResultMap" type="com.pandora.domain.convertiblebond.model.ConvertibleBondShotRegister">
         <id column="id" property="id"/>
         <result column="bond_code" property="bondCode"/>
+        <result column="bond_name" property="bondName"/>
         <result column="user_id" property="userId"/>
         <result column="email" property="email"/>
         <result column="is_send" property="isSend"/>
@@ -14,12 +15,26 @@
     </resultMap>
 
     <sql id="BaseColumnList">
-        id, bond_code, user_id, email, is_send, send_time, last_modify_time, create_time
+        id, bond_code, bond_name, user_id, email, is_send, send_time, last_modify_time, create_time
     </sql>
 
     <insert id="insert" parameterType="ConvertibleBondShotRegister">
-        INSERT INTO convertible_bond_shot_register(id, bond_code, user_id, email, is_send, send_time)
+        INSERT INTO convertible_bond_shot_register(id, bond_code, bond_name, user_id, email, is_send, send_time)
         VALUES
-        (#{item.id}, #{item.bondCode}, #{item.userId}, #{item.email}, #{item.isSend}, #{item.sendTime})
+        (#{id}, #{bondCode}, #{bondName}, #{userId}, #{email}, #{isSend}, #{sendTime})
     </insert>
+
+    <select id="findCountByUserIdAndBondCode" parameterType="map" resultType="Integer">
+        SELECT count(1)
+        FROM convertible_bond_shot_register
+        WHERE user_id = #{userId} AND bond_code = #{bondCode}
+    </select>
+
+    <select id="findPageByUserId" parameterType="map" resultMap="BaseResultMap">
+        SELECT <include refid="BaseColumnList"/>
+        FROM convertible_bond_shot_register
+        WHERE user_id = #{userId}
+        ORDER BY create_time DESC
+        LIMIT #{offset}, #{size}
+    </select>
 </mapper>

@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.pandora.infrastructure.util.HttpUtil;
 import com.pandora.infrastructure.wx.model.WxLoginResponse;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
@@ -11,7 +12,8 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "pandora.wx")
 public class WxClient {
 
-    private static final Gson GSON = new Gson();
+    @Autowired
+    private Gson gson;
 
     @Setter
     private String url;
@@ -27,7 +29,7 @@ public class WxClient {
                 String.format("/sns/jscode2session?appid=%s&secret=%s&js_code=%s&grant_type=authorization_code",
                 appId, appSecret, code);
         String res  = HttpUtil.get(uri, String.class);
-        WxLoginResponse response = GSON.fromJson(res, WxLoginResponse.class);
+        WxLoginResponse response = gson.fromJson(res, WxLoginResponse.class);
         if (response == null || !response.isSuccess()) {
             throw new RuntimeException("微信登录失败");
         }

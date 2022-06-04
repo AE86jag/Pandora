@@ -8,6 +8,10 @@ public enum FixedInvestmentCycleFirstCategory {
     MONTH("每月定投");
     private String description;
 
+    public String getDescription() {
+        return description;
+    }
+
     FixedInvestmentCycleFirstCategory(String description) {
         this.description = description;
     }

@@ -41,7 +41,8 @@ pandora:
     app-id: wx80e8599c14b12965
     app-secret: 01f7af2f69ba7f210bc1b44cce6fb962
   eastmoney:
-    url: http://datacenter-web.eastmoney.com
+    bond-url: http://datacenter-web.eastmoney.com
+    fund-url: https://fundsuggest.eastmoney.com
 logging:
   file:
     path: /root/taoshop/log

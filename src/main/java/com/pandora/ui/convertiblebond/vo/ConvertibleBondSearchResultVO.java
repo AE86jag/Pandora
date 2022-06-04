@@ -1,4 +1,4 @@
-package com.pandora.ui.convertiblebond.command;
+package com.pandora.ui.convertiblebond.vo;
 
 import com.pandora.domain.convertiblebond.model.ConvertibleBondSearchResult;
 import lombok.Data;

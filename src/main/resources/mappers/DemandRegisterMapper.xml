@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pandora.domain.demand.mapper.DemandRegisterMapper">
+    <resultMap id="BaseResultMap" type="com.pandora.domain.demand.model.DemandRegister">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="user_id" property="userId"/>
+        <result column="contact" property="contact"/>
+        <result column="demand_detail" property="demandDetail"/>
+        <result column="status" property="status"/>
+        <result column="last_modify_time" property="lastModifyTime" jdbcType="TIMESTAMP"/>
+        <result column="create_time" property="createTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="BaseColumnList">
+        id, `name`, contact, demand_detail, status,last_modify_time ,create_time
+    </sql>
+
+    <insert id="insert" parameterType="ConvertibleBond">
+        INSERT INTO demand_register(id, `name`, user_id, contact, demand_detail, status)
+        VALUES
+        (#{id}, #{name}, #{userId}, #{contact}, #{demandDetail}, #{status})
+    </insert>
+    
+    <select id="findPageByUserId" parameterType="map" resultMap="BaseResultMap">
+        SELECT <include refid="BaseColumnList"/>
+        FROM demand_register
+        WHERE user_id = #{userId}
+        ORDER BY create_time DESC
+        LIMIT #{offset}, #{size}
+    </select>
+</mapper>

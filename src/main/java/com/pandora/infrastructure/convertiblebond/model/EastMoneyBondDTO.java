@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class EastMoneyDTO<T> {
+public class EastMoneyBondDTO<T> {
 
     private String version;
 
