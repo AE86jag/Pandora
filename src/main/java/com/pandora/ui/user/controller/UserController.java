@@ -3,6 +3,8 @@ package com.pandora.ui.user.controller;
 import com.pandora.domain.user.model.Role;
 import com.pandora.domain.user.service.IUserService;
 import com.pandora.infrastructure.interceptor.HasAnyRole;
+import com.pandora.infrastructure.notify.EmailMessage;
+import com.pandora.infrastructure.notify.EmailNotify;
 import com.pandora.ui.user.UserLoginCommand;
 import com.pandora.ui.user.vo.UserLoginVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,9 @@ public class UserController {
     @Autowired
     private IUserService iUserService;
 
+    @Autowired
+    private EmailNotify emailNotify;
+
     @PostMapping("/login")
     public UserLoginVO login(@RequestBody UserLoginCommand command) {
         String tokenId = iUserService.login(command.getCode());
@@ -24,6 +29,7 @@ public class UserController {
     @GetMapping("/test")
     @HasAnyRole({Role.NORMAL, Role.ADMIN})
     public String test() {
-        return "111";
+        emailNotify.send((EmailMessage) null);
+        return "11";
     }
 }

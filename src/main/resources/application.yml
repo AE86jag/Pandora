@@ -30,6 +30,17 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: Jay-123456!
+  mail:
+    host: smtp.qq.com
+    port: 465
+    protocol: smtp
+    username: 1475874613qq.com
+    password: wgtjvwflkondijhi
+#    properties:
+#      mail:
+#        smtp:
+#          ssl:
+#            enable: true
 shop:
   ftp:
     ip: 101.200.74.208

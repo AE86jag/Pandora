@@ -55,6 +55,9 @@ dependencies {
 
     compile 'com.google.code.gson:gson:2.6.2'
 
+    //邮件
+    compile 'org.springframework.boot:spring-boot-starter-mail'
+
     //compile 'org.springframework.boot:spring-boot-starter-security'
     //契约测试
     testCompile 'com.github.macdao:moscow:0.3.0'
