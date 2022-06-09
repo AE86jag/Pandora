@@ -1,12 +1,16 @@
 package com.pandora.infrastructure.fund.fixedinvestment.implementation;
 
+import com.google.common.collect.Lists;
 import com.pandora.domain.fund.fixedinvestment.mapper.FundFixedInvestmentConditionMapper;
 import com.pandora.domain.fund.fixedinvestment.model.FundFixedInvestmentCondition;
 import com.pandora.domain.fund.fixedinvestment.service.IFundFixedInvestmentConditionService;
 import com.pandora.infrastructure.common.CurrentUserUtils;
+import com.pandora.infrastructure.notify.EmailSender;
+import com.pandora.infrastructure.notify.FixedEmailInvestmentMessage;
+import com.pandora.infrastructure.notify.FixedInvestmentEmailNotify;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
-import sun.jvm.hotspot.debugger.Page;
 
 import java.util.List;
 
@@ -15,6 +19,9 @@ public class FundFixedInvestmentConditionServiceImpl implements IFundFixedInvest
 
     @Autowired
     private FundFixedInvestmentConditionMapper fundFixedInvestmentConditionMapper;
+
+    @Autowired
+    private JavaMailSender javaMailSender;
 
     @Override
     public void createFundFixedInvestmentCondition(FundFixedInvestmentCondition fundFixedInvestmentCondition) {
@@ -45,5 +52,14 @@ public class FundFixedInvestmentConditionServiceImpl implements IFundFixedInvest
             throw new RuntimeException("该条件单已修改，无需修改");
         }
         fundFixedInvestmentConditionMapper.updateStatusById(status, id);
+    }
+
+    @Override
+    public void messageNotify() {
+        FixedEmailInvestmentMessage message = new FixedEmailInvestmentMessage(
+                Lists.newArrayList("754244523@qq.com", "15717003806@163.com"),
+                "消息通知测试", "这是一个内容，内容很长很长很长很长很长长长长长长长长长长长长");
+        EmailSender sender = new EmailSender(javaMailSender);
+        new FixedInvestmentEmailNotify(Lists.newArrayList(sender)).send(Lists.newArrayList(message));
     }
 }

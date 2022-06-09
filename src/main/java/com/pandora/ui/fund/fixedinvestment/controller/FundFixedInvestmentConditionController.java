@@ -42,4 +42,9 @@ public class FundFixedInvestmentConditionController {
         iFundFixedInvestmentConditionService.changeStatusById(id, status);
 
     }
+
+    @PostMapping("/notify")
+    public void messageNotify() {
+        iFundFixedInvestmentConditionService.messageNotify();
+    }
 }

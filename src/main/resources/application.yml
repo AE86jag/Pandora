@@ -5,9 +5,9 @@ logging:
   level:
     com:
       pandora: DEBUG
-  file:
-    path: C:\Users\Jay\Desktop
-    clean-history-on-start: true
+  #file:
+    #path: C:\Users\Jay\Desktop
+    #clean-history-on-start: true
 
 spring:
   servlet:
@@ -32,9 +32,9 @@ spring:
     password: Jay-123456!
   mail:
     host: smtp.qq.com
-    port: 465
+    port: 587
     protocol: smtp
-    username: 1475874613qq.com
+    username: 1475874613@qq.com
     password: wgtjvwflkondijhi
 #    properties:
 #      mail:
@@ -54,6 +54,6 @@ pandora:
   eastmoney:
     bond-url: http://datacenter-web.eastmoney.com
     fund-url: https://fundsuggest.eastmoney.com
-logging:
-  file:
-    path: /root/taoshop/log
+#logging:
+  #file:
+    #path: /root/taoshop/log

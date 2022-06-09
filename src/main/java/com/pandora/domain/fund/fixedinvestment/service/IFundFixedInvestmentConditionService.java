@@ -11,4 +11,6 @@ public interface IFundFixedInvestmentConditionService {
     List<FundFixedInvestmentCondition> getUserConditionsPage(int page, int size);
 
     void changeStatusById(String id, Integer status);
+
+    void messageNotify();
 }
