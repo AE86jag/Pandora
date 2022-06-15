@@ -54,6 +54,7 @@ pandora:
   eastmoney:
     bond-url: http://datacenter-web.eastmoney.com
     fund-url: https://fundsuggest.eastmoney.com
+    nav-estimate-url: http://fundgz.1234567.com.cn
 #logging:
   #file:
     #path: /root/taoshop/log

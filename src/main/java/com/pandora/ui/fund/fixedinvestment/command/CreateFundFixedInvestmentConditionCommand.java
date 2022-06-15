@@ -68,6 +68,7 @@ public class CreateFundFixedInvestmentConditionCommand {
         condition.setPerAmount(perAmount);
         condition.setEmail(email);
         condition.setStatus(1);
+        condition.setIsMaintain(false);
         condition.setUserId(CurrentUserUtils.currenUserId());
         return condition;
     }

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.pandora.domain.fund.product.mapper.NavMapper">
+    <resultMap id="BaseResultMap" type="com.pandora.domain.fund.product.model.Nav">
+        <result column="fund_code" jdbcType="VARCHAR" property="fundCode"/>
+        <result column="nav_date" jdbcType="DATE" property="navDate"/>
+        <result column="nav" jdbcType="DECIMAL" property="nav"/>
+        <result column="last_modified_time" jdbcType="TIMESTAMP" property="lastModifiedTime"/>
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        fund_code, nav_date, nav, last_modified_time, created_time
+    </sql>
+
+    <insert id="insert" parameterType="Nav">
+        INSERT INTO nav(fund_code, nav_date, nav)
+        VALUES
+        (#{fundCode}, #{navDate}, #{nav})
+    </insert>
+</mapper>

@@ -15,21 +15,28 @@
         <result column="email" jdbcType="VARCHAR" property="email"/>
         <result column="user_id" jdbcType="VARCHAR" property="userId"/>
         <result column="status" jdbcType="INTEGER" property="status"/>
+        <result column="is_maintain" jdbcType="INTEGER" property="isMaintain"/>
         <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
         <result column="last_modified_time" jdbcType="TIMESTAMP" property="lastModifiedTime"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         id, fund_code, fund_name, target_market_value, first_category_of_cycle, second_category_of_cycle,
-        positive_increase, negative_increase, per_amount, email, user_id, status, created_time, last_modified_time
+        positive_increase, negative_increase, per_amount, email, user_id, status, is_maintain, created_time, last_modified_time
+    </sql>
+
+    <sql id="Base_Column_List_Join">
+        c.id, c.fund_code, c.fund_name, c.target_market_value, c.first_category_of_cycle, c.second_category_of_cycle,
+        c.positive_increase, c.negative_increase, c.per_amount, c.email, c.user_id, c.status, c.is_maintain,
+        c.created_time, c.last_modified_time
     </sql>
 
     <insert id="insert" parameterType="FundFixedInvestmentCondition">
         INSERT INTO fund_fixed_investment_condition
         (id, fund_code, fund_name, target_market_value, first_category_of_cycle, second_category_of_cycle,
-        positive_increase, negative_increase, per_amount, email, user_id, status)
+        positive_increase, negative_increase, per_amount, email, user_id, status, is_maintain)
         VALUES(#{id}, #{fundCode}, #{fundName}, #{targetMarketValue}, #{firstCategoryOfCycle}, #{secondCategoryOfCycle},
-        #{positiveIncrease}, #{negativeIncrease}, #{perAmount}, #{email}, #{userId}, #{status})
+        #{positiveIncrease}, #{negativeIncrease}, #{perAmount}, #{email}, #{userId}, #{status}, #{isMaintain})
     </insert>
 
     <select id="findCountByUserIdAndFundCode" parameterType="map" resultType="Integer">
@@ -56,4 +63,35 @@
         SET status = #{status}
         WHERE id = #{id}
     </update>
+
+    <select id="findByCycle" parameterType="ConditionSearchParameter" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM fund_fixed_investment_condition
+        WHERE
+        ((first_category_of_cycle = #{firstCategoryOfDay} AND second_category_of_cycle = #{secondCategoryOfDay})
+        OR
+        (first_category_of_cycle = #{firstCategoryOfWeek} AND second_category_of_cycle = #{secondCategoryOfWeek})
+        OR
+        (first_category_of_cycle = #{firstCategoryOfDoubleWeek} AND second_category_of_cycle = #{secondCategoryOfDoubleWeek})
+        OR
+        (first_category_of_cycle = #{firstCategoryOfMonth} AND second_category_of_cycle = #{secondCategoryOfMonth})
+        OR is_maintain = 1)
+        AND status = 1
+
+    </select>
+
+    <update id="updateIsMaintainById" parameterType="map">
+        UPDATE fund_fixed_investment_condition SET is_maintain = #{isMaintain} WHERE id = #{id}
+    </update>
+
+    <select id="findPostponeConditionByDate" parameterType="map" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List_Join"/>
+        FROM postpone_record pr
+        INNER JOIN fund_fixed_investment_condition c ON pr.condition_id = c.id
+        WHERE pr.trigger_date = #{date}
+    </select>
+
+    <select id="findAllFundCodes" resultType="String">
+        SELECT DISTINCT fund_code FROM fund_fixed_investment_condition
+    </select>
 </mapper>

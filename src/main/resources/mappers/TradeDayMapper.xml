@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.pandora.domain.holiday.mapper.TradeDayMapper">
+    <resultMap id="BaseResultMap" type="com.pandora.domain.holiday.model.TradeDay">
+        <id column="date" jdbcType="DATE" property="date"/>
+        <result column="is_work_day" jdbcType="DATE" property="isWorkDay"/>
+        <result column="last_modified_time" jdbcType="TIMESTAMP" property="lastModifiedTime"/>
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        `date`, is_work_day, last_modified_time, created_time
+    </sql>
+
+    <select id="isWorkDay" parameterType="map" resultType="Boolean">
+        SELECT is_work_day FROM trade_day WHERE `date` = #{date}
+    </select>
+
+    <select id="findNextTradeDay" parameterType="DATE" resultType="DATE">
+        SELECT `date` FROM trade_day
+        WHERE is_work_day = 1 AND `date` &gt; #{date}
+        ORDER BY `date` ASC
+        LIMIT 1
+    </select>
+
+    <select id="findPreTradeDay" parameterType="DATE" resultType="DATE">
+        SELECT `date` FROM trade_day
+        WHERE is_work_day = 1 AND `date` &lt; #{date}
+        ORDER BY `date` DESC
+        LIMIT 1
+    </select>
+
+    <select id="findTwoAheadTradeDay" parameterType="DATE" resultType="DATE">
+        SELECT `date` FROM trade_day
+        WHERE is_work_day = 1 AND `date` &lt; #{date}
+        ORDER BY `date` DESC
+        LIMIT 2
+    </select>
+</mapper>

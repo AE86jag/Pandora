@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.pandora.domain.fund.fixedinvestment.mapper.FundFixedInvestmentConditionRecordMapper">
+    <resultMap id="BaseResultMap" type="com.pandora.domain.fund.fixedinvestment.model.FundFixedInvestmentConditionRecord">
+        <result column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="condition_id" jdbcType="VARCHAR" property="conditionId"/>
+        <result column="user_id" jdbcType="VARCHAR" property="userId"/>
+        <result column="trigger_time" jdbcType="TIMESTAMP" property="triggerTime"/>
+        <result column="direction" jdbcType="VARCHAR" property="direction"/>
+        <result column="fund_code" jdbcType="VARCHAR" property="fundCode"/>
+        <result column="amount" jdbcType="DECIMAL" property="amount"/>
+        <result column="is_postpone" property="isPostpone"/>
+        <result column="is_maintain" property="isMaintain"/>
+        <result column="is_liquidation" property="isLiquidation"/>
+        <result column="last_modified_time" jdbcType="TIMESTAMP" property="lastModifiedTime"/>
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, condition_id, user_id, trigger_time, direction, fund_code, amount,
+        is_postpone, is_maintain, is_liquidation, last_modified_time, created_time
+    </sql>
+
+    <insert id="insert" parameterType="FundFixedInvestmentConditionRecord">
+        INSERT INTO fund_fixed_investment_condition_record(id, condition_id, user_id, trigger_time, direction, fund_code, amount,
+        is_postpone, is_maintain, is_liquidation)
+        VALUES(#{id}, #{conditionId}, #{userId}, #{triggerTime}, #{direction}, #{fundCode}, #{amount},
+        #{isPostpone}, #{isMaintain}, #{isLiquidation})
+    </insert>
+
+    <select id="findCountByConditionIdAndIsMaintain" parameterType="String" resultType="Integer">
+        SELECT count(*)
+        FROM fund_fixed_investment_condition_record
+        WHERE condition_id = #{conditionId} AND is_maintain = #{isMaintain}
+    </select>
+
+    <select id="findLatestRecordByConditionId" parameterType="String" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM fund_fixed_investment_condition_record
+        WHERE condition_id = #{conditionId}
+        ORDER BY created_time DESC
+        LIMIT 1
+    </select>
+
+    <select id="findByFundCodeAndIsLiquidationAndDate" parameterType="map" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM fund_fixed_investment_condition_record
+        WHERE fund_code = #{fundCode} AND is_liquidation = #{isLiquidation}
+        AND created_time &gt;= #{beginDateTime} AND created_time &lt; #{endDateTime}
+    </select>
+
+    <update id="updateIsLiquidationById" parameterType="map">
+        UPDATE fund_fixed_investment_condition_record
+        SET is_liquidation = #{isLiquidation}
+        WHERE id = #{id}
+    </update>
+</mapper>

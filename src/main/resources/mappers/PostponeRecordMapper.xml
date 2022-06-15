@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.pandora.domain.fund.fixedinvestment.mapper.PostponeRecordMapper">
+    <resultMap id="BaseResultMap" type="com.pandora.domain.fund.fixedinvestment.model.PostponeRecord">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="condition_id" jdbcType="VARCHAR" property="conditionId"/>
+        <result column="trigger_date" jdbcType="DATE" property="triggerDate"/>
+        <result column="last_modified_time" jdbcType="TIMESTAMP" property="lastModifiedTime"/>
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, condition_id, trigger_date, last_modified_time, created_time
+    </sql>
+
+    <insert id="batchInsert" parameterType="PostponeRecord">
+        INSERT INTO postpone_record(id, condition_id, trigger_date)
+        VALUES
+        <foreach collection="records" item="record" separator=",">
+            (#{record.id}, #{record.conditionId}, #{record.triggerDate})
+        </foreach>
+    </insert>
+</mapper>

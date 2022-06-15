@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.pandora.domain.user.mapper.PositionMapper">
+    <resultMap id="BaseResultMap" type="com.pandora.domain.user.model.Position">
+        <result column="user_id" jdbcType="VARCHAR" property="userId"/>
+        <result column="fund_code" jdbcType="VARCHAR" property="fundCode"/>
+        <result column="share" jdbcType="DECIMAL" property="share"/>
+        <result column="last_modified_time" jdbcType="TIMESTAMP" property="lastModifiedTime"/>
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        user_id, fund_code, share, last_modified_time, created_time
+    </sql>
+
+    <select id="getPositionByFundCodeAndUserId" parameterType="map" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM `position`
+        WHERE user_id = #{userId} AND fund_code =#{fundCode}
+    </select>
+
+    <update id="updateShareByUserIdAndFundCode" parameterType="map">
+        update `position` set share = share + #{share} where user_id = #{userId} AND fund_code = #{fundCode}
+    </update>
+</mapper>

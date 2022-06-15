@@ -13,4 +13,6 @@ public interface IFundFixedInvestmentConditionService {
     void changeStatusById(String id, Integer status);
 
     void messageNotify();
+
+    void conditionExecution();
 }

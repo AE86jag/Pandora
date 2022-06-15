@@ -2,6 +2,7 @@ package com.pandora.infrastructure.eastmoney;
 
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
+import com.pandora.domain.fund.product.model.Nav;
 import com.pandora.infrastructure.convertiblebond.model.EastMoneyBondDTO;
 import com.pandora.infrastructure.convertiblebond.model.EastMoneyConvertibleBond;
 import com.pandora.infrastructure.util.HttpUtil;
@@ -12,6 +13,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.net.URLEncoder;
 import java.util.List;
 
@@ -25,6 +27,9 @@ public class EastMoneyClient {
 
     @Setter
     private String fundUrl;
+
+    @Setter
+    private String navEstimateUrl;
 
     @Autowired
     private Gson gson;
@@ -77,6 +82,23 @@ public class EastMoneyClient {
         }
 
         return data.getResult();
+    }
+
+    /*一定是最新的估值*/
+    public BigDecimal getNavEstimateByCode(String fundCode) {
+        NavEstimateDTO navEstimate = getNavByCode(fundCode);
+        return navEstimate.getEstimateNav();
+    }
+
+    public NavEstimateDTO getNavByCode(String fundCode) {
+        String uri = String.format(navEstimateUrl + "/js/%s.js", fundCode);
+        String responseString = HttpUtil.get(uri, String.class);
+        String callback = "jsonpgz";
+        if (!responseString.contains(callback)) {
+            throw new RuntimeException("基金估值获取失败");
+        }
+        responseString = responseString.substring(callback.length() + 1, responseString.length() - 2);
+        return gson.fromJson(responseString, new TypeToken<NavEstimateDTO>() {}.getType());
     }
 
 }
