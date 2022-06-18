@@ -93,14 +93,11 @@ public class FundFixedInvestmentConditionTransactionService {
     }
 
     @Transactional
-    public void doLiquidation(FundFixedInvestmentConditionRecord record, BigDecimal nav, LocalDate preTradeDate) {
+    public void doLiquidation(FundFixedInvestmentConditionRecord record, BigDecimal nav) {
         //1、计算买入、卖出份额，更新持仓表
         BigDecimal share = record.getAmount().divide(nav, 2, ROUND_HALF_UP);
         positionMapper.updateShareByUserIdAndFundCode(record.getUserId(), record.getFundCode(), share);
         //2、更新是否清算标志
         fundFixedInvestmentConditionRecordMapper.updateIsLiquidationById(record.getId(), true);
-        //3、插入净值表
-        Nav navEntity = Nav.build(record.getFundCode(), preTradeDate, nav);
-        navMapper.insert(navEntity);
     }
 }

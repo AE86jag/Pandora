@@ -19,4 +19,16 @@
         VALUES
         (#{fundCode}, #{navDate}, #{nav})
     </insert>
+
+    <insert id="saveOrUpdate" parameterType="Nav">
+        INSERT INTO nav(fund_code, nav_date, nav)
+        VALUES
+        (#{fundCode}, #{navDate}, #{nav})
+        ON DUPLICATE KEY UPDATE fund_code = values(fund_code),
+        nav_date = values(nav_date), nav = values(nav)
+    </insert>
+
+    <select id="findCountByFundCodeAndDate" parameterType="map" resultType="Integer">
+        SELECT count(1) FROM nav WHERE fund_code = #{fundCode} AND nav_date = #{date}
+    </select>
 </mapper>

@@ -9,10 +9,9 @@ import com.pandora.domain.fund.fixedinvestment.model.FundFixedInvestmentConditio
 import com.pandora.domain.fund.fixedinvestment.model.FundFixedInvestmentConditionRecord;
 import com.pandora.domain.fund.fixedinvestment.model.PostponeRecord;
 import com.pandora.domain.fund.fixedinvestment.service.IFundFixedInvestmentConditionService;
+import com.pandora.domain.fund.product.mapper.NavMapper;
 import com.pandora.domain.fund.product.model.Nav;
 import com.pandora.domain.holiday.mapper.TradeDayMapper;
-import com.pandora.domain.user.mapper.PositionMapper;
-import com.pandora.domain.user.model.Position;
 import com.pandora.infrastructure.common.CurrentUserUtils;
 import com.pandora.infrastructure.eastmoney.EastMoneyClient;
 import com.pandora.infrastructure.eastmoney.NavEstimateDTO;
@@ -58,6 +57,9 @@ public class FundFixedInvestmentConditionServiceImpl implements IFundFixedInvest
     @Autowired
     private FundFixedInvestmentConditionRecordMapper fundFixedInvestmentConditionRecordMapper;
 
+    @Autowired
+    private NavMapper navMapper;
+
     @Override
     public void createFundFixedInvestmentCondition(FundFixedInvestmentCondition fundFixedInvestmentCondition) {
         int count = fundFixedInvestmentConditionMapper.findCountByUserIdAndFundCode(
@@ -99,10 +101,9 @@ public class FundFixedInvestmentConditionServiceImpl implements IFundFixedInvest
     }
 
     /**
-     * 定时触发条件单
+     * 每天下午两点，定时触发条件单
      */
     @Scheduled(cron = "0 0 14 * * ?")
-    @Override
     public void conditionExecution() {
         LocalDate now = LocalDate.now();
 
@@ -134,11 +135,12 @@ public class FundFixedInvestmentConditionServiceImpl implements IFundFixedInvest
      * 时间策略是每天早上8-12点每小时执行一次
      * 定时清算基金净值，更新个人持仓
      */
+    @Scheduled(cron = "0 0 8-12 * * ?")
     public void liquidationExecution () {
         List<LocalDate> aheadTradeDates = tradeDayMapper.findTwoAheadTradeDay(LocalDate.now());
         LocalDate preTradeDate = aheadTradeDates.get(0);
         LocalDate twoAheadTradeDate = aheadTradeDates.get(1);
-        //获取条件单中的所有基金
+
         Set<String> fundCodes = fundFixedInvestmentConditionMapper.findAllFundCodes();
 
         for (String fundCode : fundCodes) {
@@ -148,6 +150,9 @@ public class FundFixedInvestmentConditionServiceImpl implements IFundFixedInvest
                 if (!nav.getNavLocalDate().equals(preTradeDate)) {
                     continue;
                 }
+                //如果已清算，更新数据库，防止数据库数据和接口查询的不一致
+                Nav navEntity = Nav.build(fundCode, preTradeDate, nav.getUnitNav());
+                navMapper.saveOrUpdate(navEntity);
 
                 LocalDateTime begin = twoAheadTradeDate.atTime(15,0,0);
                 LocalDateTime end = preTradeDate.atTime(15,0,0);
@@ -156,7 +161,7 @@ public class FundFixedInvestmentConditionServiceImpl implements IFundFixedInvest
 
                 for (FundFixedInvestmentConditionRecord record : records) {
                     fundFixedInvestmentConditionTransactionService
-                            .doLiquidation(record, nav.getUnitNav(), preTradeDate);
+                            .doLiquidation(record, nav.getUnitNav());
                 }
             } catch (Exception e) {
                 log.error("sync nav error, fund code: {}", fundCode, e);
@@ -167,8 +172,13 @@ public class FundFixedInvestmentConditionServiceImpl implements IFundFixedInvest
     /**
      * 定时处理延迟到下一交易日的定投任务
      */
+    @Scheduled(cron = "0 0 14 * * ?")
     public void postponeExecution() {
         LocalDate now = LocalDate.now();
+        Boolean isWorkDay = tradeDayMapper.isWorkDay(now);
+        if (!isWorkDay) {
+            return;
+        }
         List<FundFixedInvestmentCondition> conditions =
                 fundFixedInvestmentConditionMapper.findPostponeConditionByDate(now);
         for (FundFixedInvestmentCondition condition : conditions) {
