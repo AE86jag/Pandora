@@ -1,5 +1,6 @@
 package com.pandora.infrastructure.common.isolator;
 
+import com.pandora.domain.user.model.Token;
 import com.pandora.domain.user.model.User;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
@@ -17,7 +18,12 @@ public class MockIsolator implements Isolator{
     }
 
     @Override
-    public User findUserByTokenId(String tokenId)  {
+    public User findUserByUserId(String userId)  {
         return User.mock();
+    }
+
+    @Override
+    public Token getTokenByTokenId(String tokenId) {
+        return Token.mock();
     }
 }

@@ -16,9 +16,17 @@ spring:
       max-request-size: 100MB
       max-file-size: 100MB
       file-size-threshold: 10MB
+  mail:
+    host: localhost
+    port: 8888
+    protocol: smtp
+    username: 1475874613@qq.com
+    password: jjsdasfd
 pandora:
   eastmoney:
-    url: http://datacenter-web.eastmoney.com
+    bond-url: http://localhost:8080
+    fund-url: https://localhost:8080
+    nav-estimate-url: http://localhost:8080
 server:
   servlet:
     context-path: /pandora
@@ -26,7 +34,7 @@ server:
 spring:
   profiles: prod
   datasource:
-    url: jdbc:mysql://116.62.222.63/pandora?useSSL=false
+    url: jdbc:mysql://116.62.222.63/pandora?useSSL=false&serverTimezone=CTT
     driver-class-name: com.mysql.cj.jdbc.Driver
     username: root
     password: Jay-123456!

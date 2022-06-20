@@ -5,7 +5,9 @@ import com.pandora.domain.fund.product.model.Nav;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 @Mapper
 public interface NavMapper {
@@ -15,4 +17,6 @@ public interface NavMapper {
     Integer saveOrUpdate(Nav nav);
 
     Integer findCountByFundCodeAndDate(@Param("fundCode")String fundCode, @Param("date")LocalDate date);
+
+    List<BigDecimal> findLatestTwoNavByFundCode(@Param("fundCode")String fundCode);
 }

@@ -18,4 +18,18 @@ public class Token {
          token.setUserId(userId);
          return token;
      }
+
+     public boolean isExpire() {
+         return lastModifyTime.plusMinutes(30).compareTo(LocalDateTime.now()) < 0;
+     }
+
+     public static Token mock() {
+         Token token = new Token();
+         token.setId("token-id");
+         token.setUserId("user-id");
+         LocalDateTime now = LocalDateTime.now();
+         token.setCreateTime(now);
+         token.setLastModifyTime(now);
+         return token;
+     }
 }

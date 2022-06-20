@@ -5,6 +5,7 @@ import com.pandora.domain.fund.fixedinvestment.model.FundFixedInvestmentConditio
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -24,4 +25,9 @@ public interface FundFixedInvestmentConditionRecordMapper {
             @Param("endDateTime")LocalDateTime endDateTime);
 
     Integer updateIsLiquidationById(@Param("id") String id, @Param("isLiquidation")Boolean isLiquidation);
+
+    BigDecimal findSumAmountByUserIdAndFundCode(@Param("userId") String userId, @Param("fundCode") String fundCode);
+
+    List<FundFixedInvestmentConditionRecord> findByUserIdAndFundCode(@Param("userId") String userId,
+                                                                     @Param("fundCode") String fundCode);
 }

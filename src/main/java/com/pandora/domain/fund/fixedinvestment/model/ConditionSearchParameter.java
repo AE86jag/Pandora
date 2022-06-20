@@ -1,5 +1,6 @@
 package com.pandora.domain.fund.fixedinvestment.model;
 
+import com.pandora.infrastructure.common.CurrentUserUtils;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -15,6 +16,7 @@ public class ConditionSearchParameter {
     private FixedInvestmentCycleSecondCategory secondCategoryOfDoubleWeek;
     private FixedInvestmentCycleFirstCategory firstCategoryOfMonth;
     private FixedInvestmentCycleSecondCategory secondCategoryOfMonth;
+    private String userId;
 
     public static ConditionSearchParameter from(LocalDate now) {
         ConditionSearchParameter parameter = new ConditionSearchParameter();
@@ -31,6 +33,8 @@ public class ConditionSearchParameter {
         int dayOfMonth = now.getDayOfMonth();
         parameter.setFirstCategoryOfMonth(FixedInvestmentCycleFirstCategory.MONTH);
         parameter.setSecondCategoryOfMonth(FixedInvestmentCycleSecondCategory.from(dayOfMonth));
+
+        parameter.setUserId(CurrentUserUtils.currentUserId());
         return parameter;
     }
 

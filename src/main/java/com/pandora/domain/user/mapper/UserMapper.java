@@ -14,4 +14,6 @@ public interface UserMapper {
     User findByOpenIdWithAuthorities(String openId);
 
     int insertAuthority(List<Authority> authorities);
+
+    User findByIdWithAuthority(String id);
 }

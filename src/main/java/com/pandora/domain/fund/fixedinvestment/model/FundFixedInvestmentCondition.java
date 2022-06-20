@@ -43,10 +43,11 @@ public class FundFixedInvestmentCondition {
     }
 
     public String getMessageContent(BigDecimal amount) {
+        BigDecimal decimal = amount.setScale(2, ROUND_HALF_UP);
         String directionString = amount.compareTo(ZERO) > 0 ? "买入" : "卖出";
         return String.format("根据您设置的条件单，基金代码: %s, 基金名称: %s, 定投周期: %s, 您应该%s%f元", fundCode, fundName,
                 firstCategoryOfCycle.getDescription() + " " + secondCategoryOfCycle.getDescription(),
-                directionString, amount);
+                directionString, decimal);
     }
 
     /**

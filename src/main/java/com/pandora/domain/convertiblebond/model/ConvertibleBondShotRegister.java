@@ -5,7 +5,6 @@ import com.pandora.infrastructure.util.CommonUtil;
 import lombok.Data;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Data
 public class ConvertibleBondShotRegister {
@@ -25,7 +24,7 @@ public class ConvertibleBondShotRegister {
         register.setId(CommonUtil.generateId());
         register.setBondCode(bondCode);
         register.setBondName(bondName);
-        register.setUserId(CurrentUserUtils.currenUserId());
+        register.setUserId(CurrentUserUtils.currentUserId());
         register.setEmail(email);
         register.setIsSend(false);
         return register;

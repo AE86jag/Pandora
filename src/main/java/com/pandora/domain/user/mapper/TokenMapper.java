@@ -13,6 +13,8 @@ public interface TokenMapper {
 
     int insert(Token token);
 
+    Token findById(String id);
+
     Token findByUserId(String userId);
 
     int deleteByUserId(String userId);
@@ -22,4 +24,6 @@ public interface TokenMapper {
     List<Role> findAuthoritiesByTokenId(String tokenId);
 
     User findByTokenId(String id);
+
+    Integer deleteById(String id);
 }

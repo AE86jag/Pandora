@@ -35,9 +35,11 @@ public class NavEstimateDTO {
     @SerializedName("gszzl")
     private BigDecimal estimateIncreaseRate;
 
-    /*估算时间*/
+    /*估算时间
+    返回格式有问题，直接忽略
     @SerializedName("gztime")
     private Date estimateDate;
+    */
 
     public LocalDate getNavLocalDate() {
         Instant instant = navDate.toInstant();

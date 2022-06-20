@@ -2,6 +2,7 @@ package com.pandora.infrastructure.interceptor;
 
 import com.pandora.domain.user.mapper.TokenMapper;
 import com.pandora.domain.user.model.Role;
+import com.pandora.domain.user.model.Token;
 import com.pandora.domain.user.model.User;
 import com.pandora.infrastructure.common.isolator.Isolator;
 import lombok.extern.slf4j.Slf4j;
@@ -51,10 +52,24 @@ public class LoginInterceptor implements HandlerInterceptor {
             }
 
             String tokenId = authorization.split(" ")[1];
-            User user = isolator.findUserByTokenId(tokenId);
-            if (user == null) {
+            Token token = isolator.getTokenByTokenId(tokenId);
+            if (token == null) {
+                log.info("token is null");
+                response.sendError(401, "Token为空, 请登录");
+                return false;
+            }
+
+            if (token.isExpire()) {
                 log.info("token is expire");
+                tokenMapper.deleteById(tokenId);
                 response.sendError(401, "Token过期, 请重新登录");
+                return false;
+            }
+
+            User user = isolator.findUserByUserId(token.getUserId());
+            if (user == null) {
+                log.info("user is null");
+                response.sendError(401, "用户为空");
                 return false;
             }
 

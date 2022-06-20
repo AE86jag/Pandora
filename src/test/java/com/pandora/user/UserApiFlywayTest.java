@@ -1,6 +1,6 @@
 package com.pandora.user;
 
-import com.pandora.BaseApiTest;
+import com.pandora.BaseApiFlywayTest;
 import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +10,7 @@ import java.util.Map;
 
 import static org.hamcrest.CoreMatchers.is;
 
-public class UserApiTest extends BaseApiTest {
+public class UserApiFlywayTest extends BaseApiFlywayTest {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;

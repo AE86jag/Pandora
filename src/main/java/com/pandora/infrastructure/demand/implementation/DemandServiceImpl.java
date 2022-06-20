@@ -23,6 +23,6 @@ public class DemandServiceImpl implements IDemandService {
 
     @Override
     public List<DemandRegister> getDemandRegisterList(int page, int size) {
-        return demandRegisterMapper.findPageByUserId(page * size, size, CurrentUserUtils.currenUserId());
+        return demandRegisterMapper.findPageByUserId(page * size, size, CurrentUserUtils.currentUserId());
     }
 }

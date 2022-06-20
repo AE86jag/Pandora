@@ -1,4 +1,4 @@
-package com.pandora.ui.fund.fixedinvestment;
+package com.pandora.ui.fund.fixedinvestment.vo;
 
 import com.pandora.domain.fund.fixedinvestment.model.FundFixedInvestmentCondition;
 import lombok.Data;
@@ -25,6 +25,8 @@ public class FundFixedInvestmentConditionVO {
 
     private Integer status;
 
+    private String email;
+
     public static FundFixedInvestmentConditionVO from(FundFixedInvestmentCondition condition) {
         FundFixedInvestmentConditionVO vo = new FundFixedInvestmentConditionVO();
         vo.setId(condition.getId());
@@ -36,6 +38,7 @@ public class FundFixedInvestmentConditionVO {
         vo.setNegativeIncrease(condition.getNegativeIncrease());
         vo.setPerAmount(condition.getPerAmount());
         vo.setStatus(condition.getStatus());
+        vo.setEmail(condition.getEmail());
         return vo;
     }
 }

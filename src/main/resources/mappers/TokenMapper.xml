@@ -21,6 +21,12 @@
         (#{id}, #{userId})
     </insert>
 
+    <select id="findById" parameterType="String" resultMap="BaseResultMap">
+        SELECT <include refid="BaseColumnList"/>
+        FROM token
+        WHERE id = #{id}
+    </select>
+
     <select id="findByUserId" parameterType="String" resultMap="BaseResultMap">
         SELECT id, user_id FROM token WHERE user_id = #{userId}
     </select>
@@ -51,4 +57,8 @@
         LEFT JOIN authorities a ON u.id = a.user_id
         WHERE t.id = #{id}
     </select>
+
+    <delete id="deleteById" parameterType="String">
+        DELETE FROM token WHERE id = #{id}
+    </delete>
 </mapper>

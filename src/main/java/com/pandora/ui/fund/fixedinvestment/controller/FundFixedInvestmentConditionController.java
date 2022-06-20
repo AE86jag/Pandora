@@ -1,10 +1,12 @@
 package com.pandora.ui.fund.fixedinvestment.controller;
 
 import com.pandora.domain.fund.fixedinvestment.model.FundFixedInvestmentCondition;
+import com.pandora.domain.fund.fixedinvestment.model.FundFixedInvestmentConditionRecord;
 import com.pandora.domain.fund.fixedinvestment.service.IFundFixedInvestmentConditionService;
 import com.pandora.domain.user.model.Role;
 import com.pandora.infrastructure.interceptor.HasAnyRole;
-import com.pandora.ui.fund.fixedinvestment.FundFixedInvestmentConditionVO;
+import com.pandora.ui.fund.fixedinvestment.vo.FundFixedInvestmentConditionRecordVO;
+import com.pandora.ui.fund.fixedinvestment.vo.FundFixedInvestmentConditionVO;
 import com.pandora.ui.fund.fixedinvestment.command.CreateFundFixedInvestmentConditionCommand;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -46,5 +48,26 @@ public class FundFixedInvestmentConditionController {
     @PostMapping("/notify")
     public void messageNotify() {
         iFundFixedInvestmentConditionService.messageNotify();
+    }
+
+    @GetMapping("/records")
+    @HasAnyRole(Role.NORMAL)
+    public List<FundFixedInvestmentConditionRecordVO> getFundFixedInvestmentConditionRecordsOfCurrentUser(
+            @RequestParam(required = false) String fundCode) {
+        List<FundFixedInvestmentConditionRecord> currentUserRecords =
+                iFundFixedInvestmentConditionService.findCurrentUserRecords(fundCode);
+        return currentUserRecords.stream().map(FundFixedInvestmentConditionRecordVO::from).collect(Collectors.toList());
+    }
+
+    @PutMapping("/execution")
+    @HasAnyRole(Role.NORMAL)
+    public void conditionExecution() {
+        iFundFixedInvestmentConditionService.conditionExecution();
+    }
+
+    @PutMapping("/liquidation")
+    @HasAnyRole(Role.NORMAL)
+    public void liquidationExecution () {
+        iFundFixedInvestmentConditionService.liquidationExecution();
     }
 }

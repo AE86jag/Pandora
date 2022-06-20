@@ -23,6 +23,7 @@ public class DemandController {
     @PostMapping
     @HasAnyRole(Role.NORMAL)
     public void createDemand(@RequestBody CreateDemandCommand command) {
+        System.out.println("Controller的线程ID: " + Thread.currentThread().getId());
         command.check();
         iDemandService.demandRegister(command.getName(), command.getContact(), command.getDemandDetail());
     }

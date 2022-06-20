@@ -15,11 +15,21 @@ import java.time.LocalDateTime;
 public class Position {
     private String userId;
     private String fundCode;
+    private String fundName;
     private BigDecimal share;
     private LocalDateTime lastModifiedTime;
     private LocalDateTime createdTime;
 
     public BigDecimal calculationAmount(BigDecimal nav) {
         return share.multiply(nav);
+    }
+
+    public static Position build(String userId, String fundCode, String fundName, BigDecimal share) {
+        Position position = new Position();
+        position.setUserId(userId);
+        position.setFundCode(fundCode);
+        position.setFundName(fundName);
+        position.setShare(share);
+        return position;
     }
 }

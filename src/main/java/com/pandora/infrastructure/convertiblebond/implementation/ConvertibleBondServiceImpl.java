@@ -60,7 +60,7 @@ public class ConvertibleBondServiceImpl implements IConvertibleBondService {
             throw new RuntimeException("债券代码不存在");
         }
         Integer registers = convertibleBondShotRegisterMapper.findCountByUserIdAndBondCode(
-                CurrentUserUtils.currenUserId(), bondCode);
+                CurrentUserUtils.currentUserId(), bondCode);
         if (registers != null && registers > 0) {
             throw new RuntimeException("该债券已登记");
         }
@@ -72,6 +72,6 @@ public class ConvertibleBondServiceImpl implements IConvertibleBondService {
 
     @Override
     public List<ConvertibleBondShotRegister> convertibleBondShotRegisterList(int page, int size) {
-        return convertibleBondShotRegisterMapper.findPageByUserId(page * size, size, CurrentUserUtils.currenUserId());
+        return convertibleBondShotRegisterMapper.findPageByUserId(page * size, size, CurrentUserUtils.currentUserId());
     }
 }

@@ -17,6 +17,10 @@ public class FixedEmailInvestmentMessage implements IMessage {
 
     private String content;
 
+    public FixedEmailInvestmentMessage() {
+
+    }
+
     public FixedEmailInvestmentMessage(List<String> destinationAddress, String title, String content) {
         this.destinationAddress = destinationAddress;
         this.title = title;

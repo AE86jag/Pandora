@@ -77,6 +77,9 @@
         (first_category_of_cycle = #{firstCategoryOfMonth} AND second_category_of_cycle = #{secondCategoryOfMonth})
         OR is_maintain = 1)
         AND status = 1
+        <if test="userId != null">
+            AND user_id = #{userId}
+        </if>
 
     </select>
 

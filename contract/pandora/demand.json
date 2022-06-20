@@ -1,0 +1,20 @@
+[
+  {
+    "description": "user_can_add_demand",
+    "request": {
+      "method": "POST",
+      "uri": "/pandora/demand",
+      "headers": {
+        "Authorization": "Token 1"
+      },
+      "json": {
+        "name": "名称",
+        "contact": "在开始部署持续构建之前，你需要先安装好必备的软件，包含jdk、git、Gradle、Jenkins。",
+        "demandDetail": "需求详情需求详情很长很长很长很长长很长很长很长很长长长长长长长长长长长长"
+      }
+    },
+    "response": {
+      "status": 200
+    }
+  }
+]

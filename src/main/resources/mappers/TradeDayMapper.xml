@@ -31,7 +31,7 @@
         LIMIT 1
     </select>
 
-    <select id="findTwoAheadTradeDay" parameterType="DATE" resultType="DATE">
+    <select id="findTwoAheadTradeDay" parameterType="java.time.LocalDate" resultType="java.time.LocalDate">
         SELECT `date` FROM trade_day
         WHERE is_work_day = 1 AND `date` &lt; #{date}
         ORDER BY `date` DESC

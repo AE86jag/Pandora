@@ -63,7 +63,7 @@ public class FundFixedInvestmentConditionServiceImpl implements IFundFixedInvest
     @Override
     public void createFundFixedInvestmentCondition(FundFixedInvestmentCondition fundFixedInvestmentCondition) {
         int count = fundFixedInvestmentConditionMapper.findCountByUserIdAndFundCode(
-                fundFixedInvestmentCondition.getFundCode(), CurrentUserUtils.currenUserId());
+                fundFixedInvestmentCondition.getFundCode(), CurrentUserUtils.currentUserId());
         if (count != 0) {
             throw new RuntimeException("该基金条件单已存在");
         }
@@ -72,7 +72,7 @@ public class FundFixedInvestmentConditionServiceImpl implements IFundFixedInvest
 
     @Override
     public List<FundFixedInvestmentCondition> getUserConditionsPage(int page, int size) {
-        return fundFixedInvestmentConditionMapper.findPageByUserId(page * size, size, CurrentUserUtils.currenUserId());
+        return fundFixedInvestmentConditionMapper.findPageByUserId(page * size, size, CurrentUserUtils.currentUserId());
     }
 
     @Override
@@ -82,7 +82,7 @@ public class FundFixedInvestmentConditionServiceImpl implements IFundFixedInvest
             throw new RuntimeException("条件单不存在，请刷新重试");
         }
 
-        if (!condition.getUserId().equals(CurrentUserUtils.currenUserId())) {
+        if (!condition.getUserId().equals(CurrentUserUtils.currentUserId())) {
             throw new RuntimeException("该条件单不属于您");
         }
         if (status.equals(condition.getStatus())) {
@@ -100,10 +100,17 @@ public class FundFixedInvestmentConditionServiceImpl implements IFundFixedInvest
         new FixedInvestmentEmailNotify(Lists.newArrayList(sender)).send(Lists.newArrayList(message));
     }
 
+    @Override
+    public List<FundFixedInvestmentConditionRecord> findCurrentUserRecords(String fundCode) {
+        return fundFixedInvestmentConditionRecordMapper.findByUserIdAndFundCode(
+                        CurrentUserUtils.currentUserId(), fundCode);
+    }
+
     /**
      * 每天下午两点，定时触发条件单
      */
     @Scheduled(cron = "0 0 14 * * ?")
+    @Override
     public void conditionExecution() {
         LocalDate now = LocalDate.now();
 
@@ -136,6 +143,7 @@ public class FundFixedInvestmentConditionServiceImpl implements IFundFixedInvest
      * 定时清算基金净值，更新个人持仓
      */
     @Scheduled(cron = "0 0 8-12 * * ?")
+    @Override
     public void liquidationExecution () {
         List<LocalDate> aheadTradeDates = tradeDayMapper.findTwoAheadTradeDay(LocalDate.now());
         LocalDate preTradeDate = aheadTradeDates.get(0);
@@ -172,7 +180,8 @@ public class FundFixedInvestmentConditionServiceImpl implements IFundFixedInvest
     /**
      * 定时处理延迟到下一交易日的定投任务
      */
-    @Scheduled(cron = "0 0 14 * * ?")
+    @Scheduled(cron = "0 30 14 * * ?")
+    @Override
     public void postponeExecution() {
         LocalDate now = LocalDate.now();
         Boolean isWorkDay = tradeDayMapper.isWorkDay(now);

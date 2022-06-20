@@ -9,7 +9,6 @@ import lombok.Data;
 import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
-import java.util.UUID;
 
 @Data
 public class CreateFundFixedInvestmentConditionCommand {
@@ -69,7 +68,7 @@ public class CreateFundFixedInvestmentConditionCommand {
         condition.setEmail(email);
         condition.setStatus(1);
         condition.setIsMaintain(false);
-        condition.setUserId(CurrentUserUtils.currenUserId());
+        condition.setUserId(CurrentUserUtils.currentUserId());
         return condition;
     }
 }

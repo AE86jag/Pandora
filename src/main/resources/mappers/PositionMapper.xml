@@ -5,14 +5,20 @@
     <resultMap id="BaseResultMap" type="com.pandora.domain.user.model.Position">
         <result column="user_id" jdbcType="VARCHAR" property="userId"/>
         <result column="fund_code" jdbcType="VARCHAR" property="fundCode"/>
+        <result column="fund_name" jdbcType="VARCHAR" property="fundName"/>
         <result column="share" jdbcType="DECIMAL" property="share"/>
         <result column="last_modified_time" jdbcType="TIMESTAMP" property="lastModifiedTime"/>
         <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        user_id, fund_code, share, last_modified_time, created_time
+        user_id, fund_code, fund_name, share, last_modified_time, created_time
     </sql>
+
+    <insert id="insert" parameterType="Position">
+        INSERT INTO `position`(user_id, fund_code, fund_name, share)
+        VALUES(#{userId}, #{fundCode}, #{fundName}, #{share})
+    </insert>
 
     <select id="getPositionByFundCodeAndUserId" parameterType="map" resultMap="BaseResultMap">
         SELECT <include refid="Base_Column_List"/>
@@ -21,6 +27,19 @@
     </select>
 
     <update id="updateShareByUserIdAndFundCode" parameterType="map">
-        update `position` set share = share + #{share} where user_id = #{userId} AND fund_code = #{fundCode}
+        UPDATE `position` SET share = share + #{share} WHERE user_id = #{userId} AND fund_code = #{fundCode}
     </update>
+
+    <select id="findByUserId" parameterType="String" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM `position`
+        WHERE user_id = #{userId}
+    </select>
+
+    <select id="findCountByUserIdAndFundCode" parameterType="map" resultType="Integer">
+        SELECT count(1)
+        FROM `position`
+        WHERE user_id = #{userId} AND fund_code = #{fundCode}
+    </select>
 </mapper>

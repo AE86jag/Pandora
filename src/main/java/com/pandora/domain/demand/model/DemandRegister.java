@@ -30,7 +30,7 @@ public class DemandRegister {
         DemandRegister register = new DemandRegister();
         register.setId(CommonUtil.generateId());
         register.setName(name);
-        register.setUserId(CurrentUserUtils.currenUserId());
+        register.setUserId(CurrentUserUtils.currentUserId());
         register.setContact(contact);
         register.setDemandDetail(demandDetail);
         register.setStatus(0);

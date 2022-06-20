@@ -9,6 +9,7 @@
         <result column="trigger_time" jdbcType="TIMESTAMP" property="triggerTime"/>
         <result column="direction" jdbcType="VARCHAR" property="direction"/>
         <result column="fund_code" jdbcType="VARCHAR" property="fundCode"/>
+        <result column="fund_name" jdbcType="VARCHAR" property="fundName"/>
         <result column="amount" jdbcType="DECIMAL" property="amount"/>
         <result column="is_postpone" property="isPostpone"/>
         <result column="is_maintain" property="isMaintain"/>
@@ -18,18 +19,18 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id, condition_id, user_id, trigger_time, direction, fund_code, amount,
+        id, condition_id, user_id, trigger_time, direction, fund_code, fund_name, amount,
         is_postpone, is_maintain, is_liquidation, last_modified_time, created_time
     </sql>
 
     <insert id="insert" parameterType="FundFixedInvestmentConditionRecord">
-        INSERT INTO fund_fixed_investment_condition_record(id, condition_id, user_id, trigger_time, direction, fund_code, amount,
-        is_postpone, is_maintain, is_liquidation)
-        VALUES(#{id}, #{conditionId}, #{userId}, #{triggerTime}, #{direction}, #{fundCode}, #{amount},
+        INSERT INTO fund_fixed_investment_condition_record(id, condition_id, user_id, trigger_time, direction,
+        fund_code, fund_name, amount, is_postpone, is_maintain, is_liquidation)
+        VALUES(#{id}, #{conditionId}, #{userId}, #{triggerTime}, #{direction}, #{fundCode}, #{fundName}, #{amount},
         #{isPostpone}, #{isMaintain}, #{isLiquidation})
     </insert>
 
-    <select id="findCountByConditionIdAndIsMaintain" parameterType="String" resultType="Integer">
+    <select id="findCountByConditionIdAndIsMaintain" parameterType="map" resultType="Integer">
         SELECT count(*)
         FROM fund_fixed_investment_condition_record
         WHERE condition_id = #{conditionId} AND is_maintain = #{isMaintain}
@@ -41,6 +42,18 @@
         WHERE condition_id = #{conditionId}
         ORDER BY created_time DESC
         LIMIT 1
+    </select>
+
+    <select id="findByUserIdAndFundCode" parameterType="map" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM fund_fixed_investment_condition_record
+        <where>
+            user_id = #{userId}
+            <if test="fundCode != null">
+                AND fund_code = #{fundCode}
+            </if>
+        </where>
+        ORDER BY created_time DESC
     </select>
 
     <select id="findByFundCodeAndIsLiquidationAndDate" parameterType="map" resultMap="BaseResultMap">
@@ -56,4 +69,10 @@
         SET is_liquidation = #{isLiquidation}
         WHERE id = #{id}
     </update>
+
+    <select id="findSumAmountByUserIdAndFundCode" parameterType="map" resultType="DECIMAL">
+        SELECT sum(amount)
+        FROM fund_fixed_investment_condition_record
+        WHERE fund_code = #{fundCode} AND user_id = #{userId}
+    </select>
 </mapper>

@@ -22,6 +22,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import static java.math.BigDecimal.ROUND_HALF_UP;
+import static java.math.BigDecimal.ZERO;
 
 @Service
 public class FundFixedInvestmentConditionTransactionService {
@@ -50,7 +51,7 @@ public class FundFixedInvestmentConditionTransactionService {
         BigDecimal estimateNav = eastMoneyClient.getNavEstimateByCode(condition.getFundCode());
         Position position =
                 positionMapper.getPositionByFundCodeAndUserId(condition.getUserId(), condition.getFundCode());
-        BigDecimal currentAmount = position.calculationAmount(estimateNav);
+        BigDecimal currentAmount = position == null ? ZERO : position.calculationAmount(estimateNav);
 
         BigDecimal toBuyAmount = null;
 
@@ -94,10 +95,16 @@ public class FundFixedInvestmentConditionTransactionService {
 
     @Transactional
     public void doLiquidation(FundFixedInvestmentConditionRecord record, BigDecimal nav) {
-        //1、计算买入、卖出份额，更新持仓表
         BigDecimal share = record.getAmount().divide(nav, 2, ROUND_HALF_UP);
-        positionMapper.updateShareByUserIdAndFundCode(record.getUserId(), record.getFundCode(), share);
-        //2、更新是否清算标志
+
+        Integer positionCount = positionMapper.findCountByUserIdAndFundCode(record.getUserId(), record.getFundCode());
+        if (positionCount == null || positionCount == 0) {
+            positionMapper.insert(
+                    Position.build(record.getUserId(), record.getFundCode(), record.getFundName(), share));
+        } else {
+            positionMapper.updateShareByUserIdAndFundCode(record.getUserId(), record.getFundCode(), share);
+        }
+
         fundFixedInvestmentConditionRecordMapper.updateIsLiquidationById(record.getId(), true);
     }
 }

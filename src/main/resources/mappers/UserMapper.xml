@@ -47,6 +47,15 @@
         WHERE u.open_id = #{openId}
     </select>
 
+    <select id="findByIdWithAuthority" resultMap="BaseResultMapWithAuthorities" parameterType="String">
+        SELECT
+        u.id, u.mobile, u.email, u.open_id, u.union_id, u.status, u.last_modify_time, u.create_time,
+        a.authority
+        FROM `user` u
+        LEFT JOIN authorities a ON u.id = a.user_id
+        WHERE u.id = #{id}
+    </select>
+
     <insert id="insertAuthority" parameterType="list">
         INSERT authorities(id, user_id, authority)
         VALUES

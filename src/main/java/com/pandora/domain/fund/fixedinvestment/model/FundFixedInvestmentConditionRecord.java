@@ -14,6 +14,7 @@ public class FundFixedInvestmentConditionRecord {
     private LocalDateTime triggerTime;
     private Direction direction;
     private String fundCode;
+    private String fundName;
     private BigDecimal amount;
     /**
      * 是否是延迟的记录，触发时间为非交易日，延长到下一交易日触发的场景
@@ -36,6 +37,7 @@ public class FundFixedInvestmentConditionRecord {
         record.setTriggerTime(LocalDateTime.now());
         record.setDirection(toBuyAmount.compareTo(BigDecimal.ZERO) > 0 ? Direction.I : Direction.O);
         record.setFundCode(condition.getFundCode());
+        record.setFundName(condition.getFundName());
         record.setAmount(toBuyAmount);
         record.setIsPostpone(isPostpone);
         record.setIsMaintain(isMaintain);
