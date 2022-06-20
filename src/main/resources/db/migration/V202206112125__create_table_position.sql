@@ -5,5 +5,5 @@ CREATE TABLE position (
     share                DECIMAL(12,2) NOT NULL COMMENT '持仓份额',
     last_modified_time   DATETIME NOT NULL DEFAULT NOW() ON UPDATE NOW() COMMENT '最后修改时间',
     created_time         DATETIME NOT NULL DEFAULT NOW() COMMENT '创建时间',
-    PRIMARY KEY (`user_id`)
+    PRIMARY KEY (`user_id`, fund_code)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8 COMMENT = '个人持仓表';
