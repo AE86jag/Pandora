@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 public class User {
     private String id;
     private String mobile;
+    private String headImage;
     private String email;
     private String openId;
     private String unionId;

@@ -6,6 +6,7 @@
         <id column="id" property="id"/>
         <result column="mobile" property="mobile"/>
         <result column="email" property="email"/>
+        <result column="head_image" property="headImage"/>
         <result column="open_id" property="openId"/>
         <result column="union_id" property="unionId"/>
         <result column="status" property="status"/>
@@ -17,6 +18,7 @@
         <id column="id" property="id"/>
         <result column="mobile" property="mobile"/>
         <result column="email" property="email"/>
+        <result column="head_image" property="headImage"/>
         <result column="open_id" property="openId"/>
         <result column="union_id" property="unionId"/>
         <result column="status" property="status"/>
@@ -29,18 +31,18 @@
     </resultMap>
 
     <sql id="BaseColumnList">
-        id, mobile, email, open_id, union_id, status, last_modify_time, create_time
+        id, mobile, head_image, email, open_id, union_id, status, last_modify_time, create_time
     </sql>
 
     <insert id="insert" parameterType="User">
-        INSERT INTO `user`(id, mobile, email, open_id, union_id, status)
+        INSERT INTO `user`(id, mobile, head_image, email, open_id, union_id, status)
         VALUES
-        (#{id}, #{mobile}, #{email}, #{openId}, #{unionId}, #{status})
+        (#{id}, #{mobile}, #{headImage}, #{email}, #{openId}, #{unionId}, #{status})
     </insert>
 
     <select id="findByOpenIdWithAuthorities" resultMap="BaseResultMapWithAuthorities" parameterType="String">
         SELECT
-        u.id, u.mobile, u.email, u.open_id, u.union_id, u.status, u.last_modify_time, u.create_time,
+        u.id, u.mobile, u.head_image, u.email, u.open_id, u.union_id, u.status, u.last_modify_time, u.create_time,
         a.authority
         FROM `user` u
         LEFT JOIN authorities a ON u.id = a.user_id
@@ -49,7 +51,7 @@
 
     <select id="findByIdWithAuthority" resultMap="BaseResultMapWithAuthorities" parameterType="String">
         SELECT
-        u.id, u.mobile, u.email, u.open_id, u.union_id, u.status, u.last_modify_time, u.create_time,
+        u.id, u.mobile, u.head_image, u.email, u.open_id, u.union_id, u.status, u.last_modify_time, u.create_time,
         a.authority
         FROM `user` u
         LEFT JOIN authorities a ON u.id = a.user_id

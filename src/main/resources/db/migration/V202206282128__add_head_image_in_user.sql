@@ -1,0 +1,1 @@
+ALTER TABLE `user` ADD COLUMN head_image VARCHAR(200) COMMENT '用户头像';
