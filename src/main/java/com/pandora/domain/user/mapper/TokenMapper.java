@@ -4,6 +4,7 @@ import com.pandora.domain.user.model.Role;
 import com.pandora.domain.user.model.Token;
 import com.pandora.domain.user.model.User;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 

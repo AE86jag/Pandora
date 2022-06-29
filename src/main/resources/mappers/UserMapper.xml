@@ -65,4 +65,9 @@
             (#{item.id}, #{item.userId}, #{item.authority})
         </foreach>
     </insert>
+
+    <update id="updateEmailAndMobileById" parameterType="map">
+        UPDATE `user` SET mobile = #{mobile}, email = #{email}
+        WHERE id = #{id}
+    </update>
 </mapper>

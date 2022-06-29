@@ -4,7 +4,9 @@ import com.pandora.domain.user.mapper.TokenMapper;
 import com.pandora.domain.user.mapper.UserMapper;
 import com.pandora.domain.user.model.Token;
 import com.pandora.domain.user.model.User;
+import com.pandora.domain.user.model.UserToken;
 import com.pandora.domain.user.service.IUserService;
+import com.pandora.infrastructure.common.CurrentUserUtils;
 import com.pandora.infrastructure.wx.WxClient;
 import com.pandora.infrastructure.wx.model.WxLoginResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +27,7 @@ public class UserService implements IUserService {
 
     @Override
     @Transactional
-    public String login(String code) {
+    public UserToken login(String code) {
         WxLoginResponse response = wxClient.login(code);
         User user = userMapper.findByOpenIdWithAuthorities(response.getOpenId());
 
@@ -35,17 +37,23 @@ public class UserService implements IUserService {
             userMapper.insertAuthority(user.getAuthorities());
             Token token = Token.from(user.getId());
             tokenMapper.insert(token);
-            return token.getId();
+            return UserToken.from(token.getId(), user);
         }
 
         Token token = tokenMapper.findByUserId(user.getId());
         if (token != null) {
             tokenMapper.extend(token.getId());
-            return token.getId();
+            return UserToken.from(token.getId(), user);
         }
 
         Token newToken = Token.from(user.getId());
         tokenMapper.insert(newToken);
-        return newToken.getId();
+        return UserToken.from(newToken.getId(), user);
+    }
+
+    @Override
+    public void userInfoUpdate(String email, String mobile) {
+        String userId = CurrentUserUtils.currentUserId();
+        userMapper.updateEmailAndMobileById(userId, mobile, email);
     }
 }
