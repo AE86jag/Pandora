@@ -30,4 +30,10 @@ public class UserController {
         iUserService.userInfoUpdate(command.getEmail(), command.getMobile());
         return UserLoginVO.UserVO.from(command.getEmail(), command.getMobile());
     }
+
+    @GetMapping("/exception")
+    @HasAnyRole(Role.NORMAL)
+    public void exception() {
+        iUserService.exception();
+    }
 }

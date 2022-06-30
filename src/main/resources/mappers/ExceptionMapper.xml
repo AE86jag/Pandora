@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.pandora.infrastructure.exception.ExceptionMapper">
+    <resultMap id="BaseResultMap" type="com.pandora.infrastructure.exception.ExceptionRecord">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="clazz" jdbcType="VARCHAR" property="clazz"/>
+        <result column="message" jdbcType="VARCHAR" property="message"/>
+        <result column="stack" jdbcType="VARCHAR" property="stack"/>
+        <result column="url" jdbcType="VARCHAR" property="url"/>
+        <result column="user_id" jdbcType="VARCHAR" property="userId"/>
+        <result column="isAttention" jdbcType="INTEGER" property="isAttention"/>
+        <result column="last_modified_time" jdbcType="TIMESTAMP" property="lastModifiedTime"/>
+        <result column="created_time" jdbcType="TIMESTAMP" property="createdTime"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, clazz, message, stack, url, user_id, is_attention, last_modified_time, created_time
+    </sql>
+
+    <insert id="insert" parameterType="ExceptionRecord">
+        INSERT INTO exception(clazz, message, stack, is_attention, url, user_id)
+        VALUES
+        (#{clazz}, #{message}, #{stack}, #{isAttention}, #{url}, #{userId})
+    </insert>
+</mapper>
