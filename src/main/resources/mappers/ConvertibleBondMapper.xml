@@ -54,4 +54,11 @@
         FROM convertible_bond
         WHERE bond_code = #{bondCode}
     </select>
+
+
+    <select id="findBySubscriptionCode" parameterType="String" resultMap="BaseResultMap">
+        SELECT <include refid="BaseColumnList"/>
+        FROM convertible_bond
+        WHERE subscription_code = #{bondCode}
+    </select>
 </mapper>

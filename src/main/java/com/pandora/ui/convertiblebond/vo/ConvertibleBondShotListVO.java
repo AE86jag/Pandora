@@ -23,7 +23,7 @@ public class ConvertibleBondShotListVO {
     public static ConvertibleBondShotListVO from(ConvertibleBondShotRegister register) {
         ConvertibleBondShotListVO item = new ConvertibleBondShotListVO();
         item.setId(register.getId());
-        item.setBondCode(register.getBondCode());
+        item.setBondCode(register.getSubscriptionCode());
         item.setBondName(register.getBondName());
         item.setEmail(register.getEmail());
         item.setSendTime(register.getSendTime());

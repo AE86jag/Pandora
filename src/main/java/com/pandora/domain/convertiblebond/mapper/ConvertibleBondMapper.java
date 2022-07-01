@@ -13,4 +13,6 @@ public interface ConvertibleBondMapper {
     List<ConvertibleBond> findByCodeOrShortNameLike(String key);
 
     ConvertibleBond findByCode(String bondCode);
+
+    ConvertibleBond findBySubscriptionCode(String bondCode);
 }

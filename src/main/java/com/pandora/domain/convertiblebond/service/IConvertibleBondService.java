@@ -14,4 +14,6 @@ public interface IConvertibleBondService {
     void shotRegister(String bondCode, String email);
 
     List<ConvertibleBondShotRegister> convertibleBondShotRegisterList(int page, int size);
+
+    void convertibleBondShotNotify();
 }

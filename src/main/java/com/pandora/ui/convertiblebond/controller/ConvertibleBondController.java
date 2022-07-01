@@ -21,11 +21,6 @@ public class ConvertibleBondController {
     @Autowired
     private IConvertibleBondService convertibleBondService;
 
-    @GetMapping
-    public String test() {
-        return "1";
-    }
-
     @PutMapping
     public void syncConvertibleBond() {
         convertibleBondService.syncConvertibleBonds();

@@ -56,9 +56,4 @@ public class UserService implements IUserService {
         String userId = CurrentUserUtils.currentUserId();
         userMapper.updateEmailAndMobileById(userId, mobile, email);
     }
-
-    @Override
-    public void exception() {
-        int a = 10/0;
-    }
 }

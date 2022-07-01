@@ -4,7 +4,7 @@
 <mapper namespace="com.pandora.domain.convertiblebond.mapper.ConvertibleBondShotRegisterMapper">
     <resultMap id="BaseResultMap" type="com.pandora.domain.convertiblebond.model.ConvertibleBondShotRegister">
         <id column="id" property="id"/>
-        <result column="bond_code" property="bondCode"/>
+        <result column="subscription_code" property="subscriptionCode"/>
         <result column="bond_name" property="bondName"/>
         <result column="user_id" property="userId"/>
         <result column="email" property="email"/>
@@ -15,19 +15,19 @@
     </resultMap>
 
     <sql id="BaseColumnList">
-        id, bond_code, bond_name, user_id, email, is_send, send_time, last_modify_time, create_time
+        id, subscription_code, bond_name, user_id, email, is_send, send_time, last_modify_time, create_time
     </sql>
 
     <insert id="insert" parameterType="ConvertibleBondShotRegister">
-        INSERT INTO convertible_bond_shot_register(id, bond_code, bond_name, user_id, email, is_send, send_time)
+        INSERT INTO convertible_bond_shot_register(id, subscription_code, bond_name, user_id, email, is_send, send_time)
         VALUES
-        (#{id}, #{bondCode}, #{bondName}, #{userId}, #{email}, #{isSend}, #{sendTime})
+        (#{id}, #{subscriptionCode}, #{bondName}, #{userId}, #{email}, #{isSend}, #{sendTime})
     </insert>
 
-    <select id="findCountByUserIdAndBondCode" parameterType="map" resultType="Integer">
+    <select id="findCountByUserIdAndSubscriptionBondCode" parameterType="map" resultType="Integer">
         SELECT count(1)
         FROM convertible_bond_shot_register
-        WHERE user_id = #{userId} AND bond_code = #{bondCode}
+        WHERE user_id = #{userId} AND subscription_code = #{subscriptionCode}
     </select>
 
     <select id="findPageByUserId" parameterType="map" resultMap="BaseResultMap">
@@ -37,4 +37,28 @@
         ORDER BY create_time DESC
         LIMIT #{offset}, #{size}
     </select>
+
+    <select id="findNeedNotifyByDate" parameterType="java.time.LocalDate" resultMap="BaseResultMap">
+        SELECT cbsr.id, cbsr.subscription_code, cbsr.bond_name, cbsr.user_id, cbsr.email, cbsr.is_send, cbsr.send_time
+        FROM convertible_bond_shot_register cbsr
+        INNER JOIN convertible_bond cb ON cb.subscription_code = cbsr.subscription_code
+        WHERE cb.listed_date = #{date}
+    </select>
+
+    <update id="updateIsSendByIds" parameterType="ConvertibleBondShotRegister">
+        UPDATE convertible_bond_shot_register SET is_send = 1
+        <where>
+            <choose>
+                <when test="registers != null and registers.size() > 0">
+                    id IN
+                    <foreach collection="registers" item="item" open="(" separator="," close=")">
+                        #{item.id}
+                    </foreach>
+                </when>
+                <otherwise>
+                    1 = 2
+                </otherwise>
+            </choose>
+        </where>
+    </update>
 </mapper>
