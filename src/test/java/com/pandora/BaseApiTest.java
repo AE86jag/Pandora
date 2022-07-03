@@ -25,11 +25,9 @@ import org.mybatis.spring.SqlSessionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.jdbc.datasource.ConnectionHolder;
+import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.transaction.support.TransactionSynchronizationManager;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -46,7 +44,6 @@ import java.util.stream.Collectors;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
-import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 
@@ -91,14 +88,12 @@ public abstract class BaseApiTest extends AbstractTransactionalJUnit4SpringConte
 
     @Before
     public void setUp() {
-        //setCurrentConnectionHolder();
+        setCurrentConnectionHolder();
     }
 
-    /*protected void setCurrentConnectionHolder() {
-        ConnectionHolder connectionHolder =
-                (ConnectionHolder) TransactionSynchronizationManager.getResource(dataSource);
-        CurrentConnectionHolder.setConnectionHolder(connectionHolder);
-    }*/
+    protected void setCurrentConnectionHolder() {
+        CurrentConnectionHolder.setConnection(DataSourceUtils.getConnection(this.dataSource));
+    }
 
     /*protected void givenCmbHeadPeerJwt() {
         givenJwtHeader(jwtHelper.createCmbHeadPeerJwt());
@@ -142,7 +137,7 @@ public abstract class BaseApiTest extends AbstractTransactionalJUnit4SpringConte
     @After
     public void destroy() {
         wireMockRule.resetAll();
-        //CurrentConnectionHolder.clear();
+        CurrentConnectionHolder.clear();
     }
 
     protected Map<String, String> assertContract() {
@@ -156,7 +151,7 @@ public abstract class BaseApiTest extends AbstractTransactionalJUnit4SpringConte
                 //.setExecutionTimeout(executionTimeout())
                 .setNecessity(necessity)
                 .assertContract();
-        //clearCache();
+        clearCache();
         return result;
     }
 
@@ -166,7 +161,7 @@ public abstract class BaseApiTest extends AbstractTransactionalJUnit4SpringConte
                 //.setExecutionTimeout(executionTimeout())
                 .setNecessity(necessity)
                 .assertContract();
-        //clearCache();
+        clearCache();
         return result;
     }
 
@@ -264,10 +259,10 @@ public abstract class BaseApiTest extends AbstractTransactionalJUnit4SpringConte
         return path + "/" + fileName;
     }
 
-    /*private void clearCache() {
+    private void clearCache() {
         Optional.ofNullable(SqlSessionUtils.getSqlSession(sqlSessionFactory))
                 .ifPresent(SqlSession::clearCache);
-    }*/
+    }
 }
 
 

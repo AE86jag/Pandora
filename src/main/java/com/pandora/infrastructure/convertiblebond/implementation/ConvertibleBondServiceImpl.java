@@ -15,6 +15,7 @@ import com.pandora.infrastructure.notify.ConvertibleBondShotRegisterMessage;
 import com.pandora.infrastructure.notify.EmailSender;
 import com.pandora.infrastructure.notify.FixedInvestmentEmailNotify;
 import com.pandora.infrastructure.notify.IMessage;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -22,10 +23,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
+@Slf4j
 public class ConvertibleBondServiceImpl implements IConvertibleBondService {
 
     @Autowired
@@ -44,6 +49,7 @@ public class ConvertibleBondServiceImpl implements IConvertibleBondService {
     @Override
     public void syncConvertibleBonds() {
         int page = 0, allPageCount = 0, size = 100;
+        List<ConvertibleBond> convertibleBonds = Lists.newArrayList();
         while (page <= allPageCount) {
             EastMoneyBondDTO.Result<EastMoneyConvertibleBond> result = eastMoneyClient.getConvertibleBondList(page, size);
             allPageCount = result.getPages();
@@ -53,10 +59,21 @@ public class ConvertibleBondServiceImpl implements IConvertibleBondService {
 
             List<ConvertibleBond> convertibleBondPOS = result.getData().stream()
                     .map(ConvertibleBond::from).collect(Collectors.toList());
-            convertibleBondMapper.batchInsertOrUpdate(convertibleBondPOS);
+            convertibleBonds.addAll(convertibleBondPOS);
             page++;
         }
 
+        Map<String, ConvertibleBond> convertibleBondMap =
+                convertibleBonds.stream().collect(Collectors.toMap(ConvertibleBond::getSubscriptionCode, c -> c,
+                        (c1, c2) -> c1.getSubscriptionDate().compareTo(c2.getSubscriptionDate()) > 0 ? c1 : c2));
+
+        List<ConvertibleBond> bonds = Lists.newArrayList(convertibleBondMap.values());
+
+        List<List<ConvertibleBond>> partition = Lists.partition(bonds, 100);
+
+        for (List<ConvertibleBond> convertibleBondList : partition) {
+            convertibleBondMapper.batchInsertOrUpdate(convertibleBondList);
+        }
     }
 
     @Override

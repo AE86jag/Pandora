@@ -18,7 +18,6 @@ public class DemandApiTest extends BaseApiTest{
     private JdbcTemplate jdbcTemplate;
 
     @Test
-    @Ignore
     public void user_can_add_demand() {
         UserInfoContextHolder.set(User.mock());
         iDemandService.demandRegister("22", "223", "22234545");
