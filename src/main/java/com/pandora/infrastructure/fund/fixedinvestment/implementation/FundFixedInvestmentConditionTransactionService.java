@@ -10,6 +10,7 @@ import com.pandora.domain.fund.product.model.Nav;
 import com.pandora.domain.user.mapper.PositionMapper;
 import com.pandora.domain.user.model.Position;
 import com.pandora.infrastructure.eastmoney.EastMoneyClient;
+import com.pandora.infrastructure.exception.ExceptionRecordService;
 import com.pandora.infrastructure.notify.EmailSender;
 import com.pandora.infrastructure.notify.FixedEmailInvestmentMessage;
 import com.pandora.infrastructure.notify.FixedInvestmentEmailNotify;
@@ -42,9 +43,6 @@ public class FundFixedInvestmentConditionTransactionService {
 
     @Autowired
     private JavaMailSender javaMailSender;
-
-    @Autowired
-    private NavMapper navMapper;
 
     @Transactional
     public void executePerCondition(FundFixedInvestmentCondition condition, Boolean isPostpone) {

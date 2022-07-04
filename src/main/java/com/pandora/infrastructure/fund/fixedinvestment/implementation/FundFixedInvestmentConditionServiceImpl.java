@@ -16,6 +16,7 @@ import com.pandora.infrastructure.common.CurrentUserUtils;
 import com.pandora.infrastructure.eastmoney.EastMoneyClient;
 import com.pandora.infrastructure.eastmoney.NavEstimateDTO;
 import com.pandora.infrastructure.exception.BusinessException;
+import com.pandora.infrastructure.exception.ExceptionRecordService;
 import com.pandora.infrastructure.notify.EmailSender;
 import com.pandora.infrastructure.notify.FixedEmailInvestmentMessage;
 import com.pandora.infrastructure.notify.FixedInvestmentEmailNotify;
@@ -59,6 +60,9 @@ public class FundFixedInvestmentConditionServiceImpl implements IFundFixedInvest
 
     @Autowired
     private NavMapper navMapper;
+
+    @Autowired
+    private ExceptionRecordService exceptionRecordService;
 
     @Override
     public void createFundFixedInvestmentCondition(FundFixedInvestmentCondition fundFixedInvestmentCondition) {
@@ -134,7 +138,14 @@ public class FundFixedInvestmentConditionServiceImpl implements IFundFixedInvest
         }
 
         for (FundFixedInvestmentCondition condition : conditions) {
-            fundFixedInvestmentConditionTransactionService.executePerCondition(condition, false);
+            try {
+                fundFixedInvestmentConditionTransactionService.executePerCondition(condition, false);
+            } catch (Exception e) {
+                log.error("execute condition error, condition id is: {}, fund code is: {}, user id is: {}",
+                        condition.getId(), condition.getFundCode(), condition.getUserId());
+                exceptionRecordService.save(e);
+            }
+
         }
     }
 

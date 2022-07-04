@@ -16,8 +16,8 @@ public class MyExceptionHandler {
 
     @ExceptionHandler(RuntimeException.class)
     public void exceptionHandler(RuntimeException e, HttpServletRequest request){
-        //TODO 异常处理完，前端不会抛异常; 异常信息不应该过滤非框架的堆栈
-        ExceptionRecord record = ExceptionRecord.from(e, request.getRequestURL().toString());
+        Boolean isAttention = e instanceof BusinessException && ((BusinessException) e).getIsPayAttentionTo();
+        ExceptionRecord record = ExceptionRecord.from(e, request.getRequestURL().toString(), isAttention);
         exceptionMapper.insert(record);
         throw e;
     }
