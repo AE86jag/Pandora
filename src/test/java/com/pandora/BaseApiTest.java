@@ -13,6 +13,10 @@ import com.github.tomakehurst.wiremock.http.HttpHeader;
 import com.github.tomakehurst.wiremock.http.HttpHeaders;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.ibatis.logging.Log;
+import org.apache.ibatis.logging.jdbc.ConnectionLogger;
+import org.apache.ibatis.mapping.MappedStatement;
+import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.junit.After;
@@ -25,9 +29,12 @@ import org.mybatis.spring.SqlSessionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.jdbc.datasource.ConnectionHolder;
 import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -36,10 +43,8 @@ import javax.sql.DataSource;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.sql.Connection;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
@@ -72,13 +77,13 @@ public abstract class BaseApiTest extends AbstractTransactionalJUnit4SpringConte
     @Rule
     public final TestName name = new TestName();
 
-    /*@Rule
-    public final ExecutionTimeoutRule timeout = new ExecutionTimeoutRule();*/
+    @Rule
+    public final ExecutionTimeoutRule timeout = new ExecutionTimeoutRule();
 
     @Value("${local.server.port}")
     protected int port;
 
-    private int executionTimeout;
+    private int executionTimeout = 120;
 
     @Autowired
     private DataSource dataSource;
@@ -92,7 +97,19 @@ public abstract class BaseApiTest extends AbstractTransactionalJUnit4SpringConte
     }
 
     protected void setCurrentConnectionHolder() {
-        CurrentConnectionHolder.setConnection(DataSourceUtils.getConnection(this.dataSource));
+        Configuration configuration = SqlSessionUtils.getSqlSession(sqlSessionFactory).getConfiguration();
+        Collection<MappedStatement> mappedStatements = configuration.getMappedStatements();
+        if(CollectionUtils.isEmpty(mappedStatements)) {
+            return;
+        }
+
+        Optional<MappedStatement> first = mappedStatements.stream().findFirst();
+        if (!first.isPresent()) {
+            return;
+        }
+        Log log = first.get().getStatementLog();
+        Connection connection = ConnectionLogger.newInstance(DataSourceUtils.getConnection(this.dataSource), log, 1);
+        CurrentConnectionHolder.setConnection(connection);
     }
 
     /*protected void givenCmbHeadPeerJwt() {
@@ -148,7 +165,7 @@ public abstract class BaseApiTest extends AbstractTransactionalJUnit4SpringConte
         final boolean necessity = description.contains("_cannot_");
         Map<String, String> result = new ContractAssertion(CONTAINER.findContracts(description))
                 .setPort(port)
-                //.setExecutionTimeout(executionTimeout())
+                .setExecutionTimeout(executionTimeout())
                 .setNecessity(necessity)
                 .assertContract();
         clearCache();
@@ -165,14 +182,14 @@ public abstract class BaseApiTest extends AbstractTransactionalJUnit4SpringConte
         return result;
     }
 
-    /*private int executionTimeout() {
+    private int executionTimeout() {
         int executionTimeoutSec = this.executionTimeout * timeout.getTimeout();
         if (firstExecution) {
             executionTimeoutSec *= 2;
             firstExecution = false;
         }
         return executionTimeoutSec;
-    }*/
+    }
 
     public void setExecutionTimeout(int executionTimeout) {
         this.executionTimeout = executionTimeout;

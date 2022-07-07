@@ -19,11 +19,8 @@ public class DemandApiTest extends BaseApiTest{
 
     @Test
     public void user_can_add_demand() {
-        UserInfoContextHolder.set(User.mock());
-        iDemandService.demandRegister("22", "223", "22234545");
-        System.out.println(jdbcTemplate.queryForMap("select * from demand_register where name = '22'"));
-
-        System.out.println("Test的线程ID: " + Thread.currentThread().getId());
+        System.out.println("测试方法的线程ID: " + Thread.currentThread().getId());
         assertContract();
+
     }
 }

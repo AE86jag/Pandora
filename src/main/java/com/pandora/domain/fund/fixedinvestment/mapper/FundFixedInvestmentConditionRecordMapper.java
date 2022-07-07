@@ -26,7 +26,9 @@ public interface FundFixedInvestmentConditionRecordMapper {
 
     Integer updateIsLiquidationById(@Param("id") String id, @Param("isLiquidation")Boolean isLiquidation);
 
-    BigDecimal findSumAmountByUserIdAndFundCode(@Param("userId") String userId, @Param("fundCode") String fundCode);
+    BigDecimal findHasLiquidationSumAmountByUserIdAndFundCode(@Param("userId") String userId, @Param("fundCode") String fundCode);
+
+    Integer findUnLiquidationCountByUserIdAndFundCode(@Param("userId") String userId, @Param("fundCode") String fundCode);
 
     List<FundFixedInvestmentConditionRecord> findByUserIdAndFundCode(@Param("userId") String userId,
                                                                      @Param("fundCode") String fundCode);

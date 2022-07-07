@@ -1,6 +1,6 @@
 package com.pandora.fund.fixedinvestment;
 
-import com.pandora.BaseApiFlywayTest;
+import com.pandora.BaseApiTest;
 
-public class FundFixedInvestmentConditionApiFlywayTest extends BaseApiFlywayTest {
+public class FundFixedInvestmentConditionApiFlywayTest extends BaseApiTest {
 }

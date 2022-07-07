@@ -17,7 +17,6 @@ import java.util.Properties;
 })
 public class ConnectionInterceptor implements Interceptor {
 
-    //TODO 拦截器导致没有日志，异步测试没有解决
     @Override
     public Object intercept(Invocation invocation) throws Throwable {
         Connection connection = CurrentConnectionHolder.getConnection();

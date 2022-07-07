@@ -70,9 +70,16 @@
         WHERE id = #{id}
     </update>
 
-    <select id="findSumAmountByUserIdAndFundCode" parameterType="map" resultType="DECIMAL">
+    <select id="findHasLiquidationSumAmountByUserIdAndFundCode" parameterType="map" resultType="DECIMAL">
         SELECT sum(amount)
         FROM fund_fixed_investment_condition_record
-        WHERE fund_code = #{fundCode} AND user_id = #{userId}
+        WHERE fund_code = #{fundCode} AND user_id = #{userId} AND is_liquidation = 1
     </select>
+
+    <select id="findUnLiquidationCountByUserIdAndFundCode" parameterType="map" resultType="INTEGER">
+        SELECT count(1)
+        FROM fund_fixed_investment_condition_record
+        WHERE fund_code = #{fundCode} AND user_id = #{userId} AND is_liquidation = 0
+    </select>
+
 </mapper>

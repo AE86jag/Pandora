@@ -17,6 +17,8 @@ public class UserPosition {
 
     private BigDecimal yield;
 
+    private Boolean hasUnLiquidation;
+
     public static UserPosition build(String fundName, BigDecimal currentAmount, BigDecimal yesterdayProfit,
                                      BigDecimal allProfit, BigDecimal yield) {
         UserPosition userPosition = new UserPosition();

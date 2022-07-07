@@ -4,6 +4,9 @@ import org.springframework.jdbc.datasource.ConnectionHolder;
 
 import java.sql.Connection;
 
+/**
+ * 保存一个全局的数据库链接
+ */
 public class CurrentConnectionHolder {
 
     private static Connection connection = null;

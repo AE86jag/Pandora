@@ -29,27 +29,28 @@ public class ExceptionRecord {
 
     private LocalDateTime createdTime;
 
-    public static ExceptionRecord from(Exception e, String url, Boolean isAttention) {
+    public static ExceptionRecord from(String clazz, String message,
+                                       StackTraceElement[] stackTrace, String url, Boolean isAttention) {
         ExceptionRecord record = new ExceptionRecord();
 
-        String clazz = e.getClass().getName();
         record.setClazz(clazz.length() > 100 ? clazz.substring(0, 100) : clazz);
 
-        String message = e.getMessage();
         record.setMessage(message != null && message.length() > 500 ? message.substring(0, 500) : message);
 
         record.setIsAttention(isAttention);
 
-        StringBuilder builder = new StringBuilder();
-        StackTraceElement[] stackTrace = e.getStackTrace();
-        for (int i = 0; i < stackTrace.length && i < 8; i++) {
-            String stack = stackTrace[i].toString();
-            if (i < 4 || stack.startsWith("com.pandora")) {
-                builder.append(stack).append("\\n ");
+        if (stackTrace != null && stackTrace.length > 0) {
+            StringBuilder builder = new StringBuilder();
+            for (int i = 0; i < stackTrace.length && i < 8; i++) {
+                String stack = stackTrace[i].toString();
+                if (i < 4 || stack.startsWith("com.pandora")) {
+                    builder.append(stack).append("\\n ");
+                }
             }
+            String stack = builder.toString();
+            record.setStack(stack.length() > 1000 ? stack.substring(0, 1000) : stack);
         }
-        String stack = builder.toString();
-        record.setStack(stack.length() > 1000 ? stack.substring(0, 1000) : stack);
+
 
         String userId = CurrentUserUtils.currentUserId();
         record.setUserId(userId);

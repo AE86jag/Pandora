@@ -17,7 +17,8 @@ public class MyExceptionHandler {
     @ExceptionHandler(RuntimeException.class)
     public void exceptionHandler(RuntimeException e, HttpServletRequest request){
         Boolean isAttention = e instanceof BusinessException && ((BusinessException) e).getIsPayAttentionTo();
-        ExceptionRecord record = ExceptionRecord.from(e, request.getRequestURL().toString(), isAttention);
+        ExceptionRecord record = ExceptionRecord.from(e.getClass().getName(), e.getMessage(), e.getStackTrace(),
+                request.getRequestURL().toString(), isAttention);
         exceptionMapper.insert(record);
         throw e;
     }

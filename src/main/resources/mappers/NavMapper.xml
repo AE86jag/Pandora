@@ -32,6 +32,26 @@
         SELECT count(1) FROM nav WHERE fund_code = #{fundCode} AND nav_date = #{date}
     </select>
 
+    <select id="findByFundCodeAndDates" parameterType="map" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM nav
+        <where>
+            fund_code = #{fundCode} AND
+            <choose>
+                <when test="dates != null and dates.size() > 0">
+                    nav_date IN
+                    <foreach collection="dates" item="date" open="(" separator="," close=")">
+                        #{date}
+                    </foreach>
+                </when>
+                <otherwise>
+                    1 = 2
+                </otherwise>
+            </choose>
+        </where>
+        ORDER BY nav_date DESC
+    </select>
+
     <select id="findLatestTwoNavByFundCode" parameterType="String" resultType="DECIMAL">
         SELECT nav
         FROM nav

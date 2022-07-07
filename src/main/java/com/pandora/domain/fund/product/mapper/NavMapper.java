@@ -19,4 +19,6 @@ public interface NavMapper {
     Integer findCountByFundCodeAndDate(@Param("fundCode")String fundCode, @Param("date")LocalDate date);
 
     List<BigDecimal> findLatestTwoNavByFundCode(@Param("fundCode")String fundCode);
+
+    List<Nav> findByFundCodeAndDates(@Param("fundCode")String fundCode, @Param("dates")List<LocalDate> dates);
 }
