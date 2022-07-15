@@ -24,7 +24,8 @@ public interface FundFixedInvestmentConditionRecordMapper {
             @Param("beginDateTime")LocalDateTime beginDateTime,
             @Param("endDateTime")LocalDateTime endDateTime);
 
-    Integer updateIsLiquidationById(@Param("id") String id, @Param("isLiquidation")Boolean isLiquidation);
+    Integer updateIsLiquidationAndConfirmNavById(@Param("id") String id, @Param("isLiquidation")Boolean isLiquidation,
+                                                 @Param("confirmNav")BigDecimal confirmNav);
 
     BigDecimal findHasLiquidationSumAmountByUserIdAndFundCode(@Param("userId") String userId, @Param("fundCode") String fundCode);
 

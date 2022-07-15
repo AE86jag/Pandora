@@ -5,12 +5,9 @@ import com.pandora.domain.fund.fixedinvestment.mapper.FundFixedInvestmentConditi
 import com.pandora.domain.fund.fixedinvestment.mapper.FundFixedInvestmentConditionRecordMapper;
 import com.pandora.domain.fund.fixedinvestment.model.FundFixedInvestmentCondition;
 import com.pandora.domain.fund.fixedinvestment.model.FundFixedInvestmentConditionRecord;
-import com.pandora.domain.fund.product.mapper.NavMapper;
-import com.pandora.domain.fund.product.model.Nav;
 import com.pandora.domain.user.mapper.PositionMapper;
 import com.pandora.domain.user.model.Position;
 import com.pandora.infrastructure.eastmoney.EastMoneyClient;
-import com.pandora.infrastructure.exception.ExceptionRecordService;
 import com.pandora.infrastructure.notify.EmailSender;
 import com.pandora.infrastructure.notify.FixedEmailInvestmentMessage;
 import com.pandora.infrastructure.notify.FixedInvestmentEmailNotify;
@@ -82,8 +79,8 @@ public class FundFixedInvestmentConditionTransactionService {
             return;
         }
 
-        FundFixedInvestmentConditionRecord record =
-                FundFixedInvestmentConditionRecord.from(condition, isPostpone, toBuyAmount, condition.getIsMaintain());
+        FundFixedInvestmentConditionRecord record = FundFixedInvestmentConditionRecord.from(
+                condition, isPostpone, toBuyAmount, condition.getIsMaintain(), estimateNav);
         fundFixedInvestmentConditionRecordMapper.insert(record);
 
         FixedEmailInvestmentMessage message = FixedEmailInvestmentMessage.from(condition, toBuyAmount);
@@ -103,6 +100,6 @@ public class FundFixedInvestmentConditionTransactionService {
             positionMapper.updateShareByUserIdAndFundCode(record.getUserId(), record.getFundCode(), share);
         }
 
-        fundFixedInvestmentConditionRecordMapper.updateIsLiquidationById(record.getId(), true);
+        fundFixedInvestmentConditionRecordMapper.updateIsLiquidationAndConfirmNavById(record.getId(), true, nav);
     }
 }

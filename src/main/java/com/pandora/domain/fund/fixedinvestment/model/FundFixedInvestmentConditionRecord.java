@@ -16,6 +16,11 @@ public class FundFixedInvestmentConditionRecord {
     private String fundCode;
     private String fundName;
     private BigDecimal amount;
+
+    /**
+     * 买入时的估算净值
+     */
+    private BigDecimal estimateNav;
     /**
      * 是否是延迟的记录，触发时间为非交易日，延长到下一交易日触发的场景
      */
@@ -25,11 +30,16 @@ public class FundFixedInvestmentConditionRecord {
      * 是否清算，触发买入时，如果是三点前，基金未清算，无法确定买入份额，需要后续清算完计算份额到持仓中，并更新该字段
      */
     private Boolean isLiquidation;
+    /**
+     * 清算时的确认净值
+     */
+    private BigDecimal confirmNav;
     private LocalDateTime lastModifiedTime;
     private LocalDateTime createdTime;
 
     public static FundFixedInvestmentConditionRecord from(FundFixedInvestmentCondition condition, Boolean isPostpone,
-                                                          BigDecimal toBuyAmount, Boolean isMaintain) {
+                                                          BigDecimal toBuyAmount, Boolean isMaintain,
+                                                          BigDecimal estimateNav) {
         FundFixedInvestmentConditionRecord record = new FundFixedInvestmentConditionRecord();
         record.setId(CommonUtil.generateId());
         record.setConditionId(condition.getId());
@@ -42,6 +52,7 @@ public class FundFixedInvestmentConditionRecord {
         record.setIsPostpone(isPostpone);
         record.setIsMaintain(isMaintain);
         record.setIsLiquidation(false);
+        record.setEstimateNav(estimateNav);
         return record;
 
     }

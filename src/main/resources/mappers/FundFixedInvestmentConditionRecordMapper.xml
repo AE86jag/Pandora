@@ -11,6 +11,8 @@
         <result column="fund_code" jdbcType="VARCHAR" property="fundCode"/>
         <result column="fund_name" jdbcType="VARCHAR" property="fundName"/>
         <result column="amount" jdbcType="DECIMAL" property="amount"/>
+        <result column="estimate_nav" jdbcType="DECIMAL" property="estimateNav"/>
+        <result column="confirm_nav" jdbcType="DECIMAL" property="confirmNav"/>
         <result column="is_postpone" property="isPostpone"/>
         <result column="is_maintain" property="isMaintain"/>
         <result column="is_liquidation" property="isLiquidation"/>
@@ -19,15 +21,15 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id, condition_id, user_id, trigger_time, direction, fund_code, fund_name, amount,
+        id, condition_id, user_id, trigger_time, direction, fund_code, fund_name, amount, estimate_nav, confirm_nav,
         is_postpone, is_maintain, is_liquidation, last_modified_time, created_time
     </sql>
 
     <insert id="insert" parameterType="FundFixedInvestmentConditionRecord">
         INSERT INTO fund_fixed_investment_condition_record(id, condition_id, user_id, trigger_time, direction,
-        fund_code, fund_name, amount, is_postpone, is_maintain, is_liquidation)
-        VALUES(#{id}, #{conditionId}, #{userId}, #{triggerTime}, #{direction}, #{fundCode}, #{fundName}, #{amount},
-        #{isPostpone}, #{isMaintain}, #{isLiquidation})
+        estimate_nav, confirm_nav, fund_code, fund_name, amount, is_postpone, is_maintain, is_liquidation)
+        VALUES(#{id}, #{conditionId}, #{userId}, #{triggerTime}, #{direction}, #{estimateNav}, #{confirmNav},
+        #{fundCode}, #{fundName}, #{amount}, #{isPostpone}, #{isMaintain}, #{isLiquidation})
     </insert>
 
     <select id="findCountByConditionIdAndIsMaintain" parameterType="map" resultType="Integer">
@@ -64,9 +66,9 @@
         AND created_time &gt;= #{beginDateTime} AND created_time &lt; #{endDateTime}
     </select>
 
-    <update id="updateIsLiquidationById" parameterType="map">
+    <update id="updateIsLiquidationAndConfirmNavById" parameterType="map">
         UPDATE fund_fixed_investment_condition_record
-        SET is_liquidation = #{isLiquidation}
+        SET is_liquidation = #{isLiquidation}, confirm_nav = #{confirmNav}
         WHERE id = #{id}
     </update>
 

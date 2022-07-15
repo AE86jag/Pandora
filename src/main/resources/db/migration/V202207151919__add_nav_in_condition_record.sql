@@ -1,0 +1,2 @@
+ALTER TABLE fund_fixed_investment_condition_record ADD COLUMN estimate_nav DECIMAL(10, 4) NOT NULL COMMENT '定投买入时的估算净值';
+ALTER TABLE fund_fixed_investment_condition_record ADD COLUMN confirm_nav DECIMAL(10, 4) COMMENT '清算时的确认净值';
