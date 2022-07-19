@@ -46,7 +46,7 @@
     </select>
 
     <update id="updateIsSendByIds" parameterType="ConvertibleBondShotRegister">
-        UPDATE convertible_bond_shot_register SET is_send = 1
+        UPDATE convertible_bond_shot_register SET is_send = 1, send_time = now()
         <where>
             <choose>
                 <when test="registers != null and registers.size() > 0">
