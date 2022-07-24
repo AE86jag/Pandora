@@ -66,3 +66,10 @@ pandora:
 #logging:
   #file:
     #path: /root/taoshop/log
+server:
+  ssl:
+    key-store: classpath:ae86jay.pfx
+    key-alias: alias
+    key-store-type: PKCS12
+    key-store-password: FQ46Vch9
+  port: 443
